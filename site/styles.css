@@ -47,7 +47,7 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{
-  font-family:'Onest','Manrope',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  font-family:'Plus Jakarta Sans','Manrope',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
   color:var(--ink);
   background:var(--bg);
   line-height:1.6;
