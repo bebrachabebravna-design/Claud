@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>НЕЙРОДОКС — ИИ-агент по документам вашей компании</title>
+<meta name="description" content="НЕЙРОДОКС — ИИ-агент внутреннего контура. Сотрудник, который прочитал все документы компании и отвечает на любой вопрос за секунды. Данные остаются внутри, соответствие 152-ФЗ.">
+<link rel="icon" type="image/svg+xml" href="assets/mark.svg?v=5">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=5">
+</head>
+<body>
+
+<div class="progress"><div class="progress__bar" id="progressBar"></div></div>
+
+<!-- mobile top bar -->
+<header class="topbar">
+  <a class="topbar__brand" href="#top">
+    <svg width="34" height="34" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="tP" x1="46" y1="14" x2="78" y2="86" gradientUnits="userSpaceOnUse"><stop stop-color="#3F7BFF"/><stop offset="1" stop-color="#1746B0"/></linearGradient>
+        <linearGradient id="tD" x1="14" y1="14" x2="40" y2="86" gradientUnits="userSpaceOnUse"><stop stop-color="#1B2D49"/><stop offset="1" stop-color="#0B1626"/></linearGradient>
+        <linearGradient id="tF" x1="64" y1="14" x2="82" y2="32" gradientUnits="userSpaceOnUse"><stop stop-color="#9DBEFF"/><stop offset="1" stop-color="#5E8DF6"/></linearGradient>
+      </defs>
+      <path d="M16 86V14C16 11.79 17.79 10 20 10H30C31.27 10 32.46 10.6 33.2 11.62L37 16.9V86C37 88.21 35.21 90 33 90H20C17.79 90 16 88.21 16 86Z" fill="url(#tD)"/>
+      <path d="M30 12L70 70V52L42 12H30Z" fill="url(#tD)" opacity="0.92"/>
+      <path d="M58 86V26L70 10H78C80.21 10 82 11.79 82 14V78L70 90H62C59.79 90 58 88.21 58 86Z" fill="url(#tP)"/>
+      <path d="M70 10V22C70 24.21 71.79 26 74 26H82L70 10Z" fill="url(#tF)"/>
+      <g stroke="#EAF1FF" stroke-width="2.6" stroke-linecap="round" opacity="0.92"><line x1="65" y1="40" x2="76" y2="40"/><line x1="65" y1="48" x2="76" y2="48"/><line x1="65" y1="56" x2="76" y2="56"/><line x1="65" y1="64" x2="73" y2="64"/></g>
+    </svg>
+    <span class="name">НЕЙРОДОКС</span>
+  </a>
+  <button class="burger" id="burger" aria-label="Меню">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+  </button>
+</header>
+<div class="scrim" id="scrim"></div>
+
+<div class="layout">
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar" id="sidebar">
+    <a class="sidebar__brand" href="#top">
+      <svg width="42" height="42" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="sP" x1="46" y1="14" x2="78" y2="86" gradientUnits="userSpaceOnUse"><stop stop-color="#3F7BFF"/><stop offset="1" stop-color="#1746B0"/></linearGradient>
+          <linearGradient id="sD" x1="14" y1="14" x2="40" y2="86" gradientUnits="userSpaceOnUse"><stop stop-color="#1B2D49"/><stop offset="1" stop-color="#0B1626"/></linearGradient>
+          <linearGradient id="sF" x1="64" y1="14" x2="82" y2="32" gradientUnits="userSpaceOnUse"><stop stop-color="#9DBEFF"/><stop offset="1" stop-color="#5E8DF6"/></linearGradient>
+        </defs>
+        <path d="M16 86V14C16 11.79 17.79 10 20 10H30C31.27 10 32.46 10.6 33.2 11.62L37 16.9V86C37 88.21 35.21 90 33 90H20C17.79 90 16 88.21 16 86Z" fill="url(#sD)"/>
+        <path d="M30 12L70 70V52L42 12H30Z" fill="url(#sD)" opacity="0.92"/>
+        <path d="M58 86V26L70 10H78C80.21 10 82 11.79 82 14V78L70 90H62C59.79 90 58 88.21 58 86Z" fill="url(#sP)"/>
+        <path d="M70 10V22C70 24.21 71.79 26 74 26H82L70 10Z" fill="url(#sF)"/>
+        <g stroke="#EAF1FF" stroke-width="2.6" stroke-linecap="round" opacity="0.92"><line x1="65" y1="40" x2="76" y2="40"/><line x1="65" y1="48" x2="76" y2="48"/><line x1="65" y1="56" x2="76" y2="56"/><line x1="65" y1="64" x2="73" y2="64"/></g>
+      </svg>
+      <span class="sidebar__brand-txt">
+        <span class="name">НЕЙРОДОКС</span>
+        <span class="tag">Документы. Знания. Решения.</span>
+      </span>
+    </a>
+
+    <nav class="nav">
+      <span class="nav__label">Навигация</span>
+      <a href="#top" class="active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg>
+        Главная
+      </a>
+      <a href="#product">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+        Продукт
+      </a>
+      <a href="#cases">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5a2 2 0 012-2h9l5 5v11a2 2 0 01-2 2H6a2 2 0 01-2-2z"/><path d="M14 3v6h6"/><path d="M8 13h8M8 17h5"/></svg>
+        Кейсы
+      </a>
+      <a href="#about">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+        О нас
+      </a>
+      <a href="#partnership">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 11l3 3 5-6"/><path d="M21 12a9 9 0 11-6.2-8.6"/></svg>
+        Партнёрство
+      </a>
+      <a href="#contact">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V6a1 1 0 011-1z"/><path d="M3 7l9 6 9-6"/></svg>
+        Контакты
+      </a>
+    </nav>
+
+    <div class="sidebar__foot">
+      <a href="#contact" class="sidebar__cta">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        Запросить демо
+      </a>
+      <p class="sidebar__contact">Telegram <a href="https://t.me/Novikoff_off" target="_blank" rel="noopener">@Novikoff_off</a></p>
+    </div>
+  </aside>
+
+  <!-- ============ CONTENT ============ -->
+  <main class="content" id="top">
+
+    <!-- ===== HERO ===== -->
+    <section class="hero">
+      <div class="hero__bg" aria-hidden="true">
+        <span class="hero__glow a"></span>
+        <span class="hero__glow b"></span>
+        <span class="hero__grid"></span>
+      </div>
+      <div class="wrap hero__inner">
+        <div class="hero__copy reveal">
+          <span class="eyebrow eyebrow--dark">
+            <span class="dot"></span> ИИ-агент внутреннего контура
+          </span>
+          <h1>Сотрудник, который<br><span class="accent">прочитал всё</span></h1>
+          <p class="lead">НЕЙРОДОКС изучает все документы вашей компании и за секунды отвечает на любой вопрос сотрудника — со ссылкой на источник. Данные не покидают ваш контур.</p>
+          <div class="btn-row">
+            <a href="#contact" class="btn btn--primary">
+              Запросить демо
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <a href="#cases" class="btn btn--ghost-dark">Смотреть кейсы</a>
+          </div>
+          <div class="hero__badges">
+            <span class="chip chip--dark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg> 152-ФЗ</span>
+            <span class="chip chip--dark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg> Внутренний контур</span>
+            <span class="chip chip--dark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> Внедрение за 5 дней</span>
+          </div>
+        </div>
+
+        <div class="hero__visual reveal d2">
+          <div class="mock">
+            <div class="mock__bar"><i></i><i></i><i></i><span class="mock__title">НЕЙРОДОКС · корпоративный ассистент</span></div>
+            <div class="mock__body">
+              <div class="bubble me">Какой регламент по возврату оборудования при увольнении?</div>
+              <div class="bubble ai">
+                <b>По регламенту HR-04:</b> сотрудник сдаёт технику на складе в течение 3 рабочих дней. Акт приёма-передачи подписывает руководитель отдела.
+                <span class="src"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5"/></svg> Регламент HR-04 · стр. 7</span>
+              </div>
+              <div class="bubble me">А если технику повредили?</div>
+              <div class="bubble ai typing-wrap"><span class="typing"><i></i><i></i><i></i></span></div>
+            </div>
+          </div>
+          <div class="mock__float a">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
+            <div><b>Ответ с источником</b><span>всегда со ссылкой</span></div>
+          </div>
+          <div class="mock__float b">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            <div><b>&lt; 5 секунд</b><span>на любой вопрос</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- trust strip -->
+      <div class="trust">
+        <div class="wrap trust__row">
+          <div class="trust__item trust__secure">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg>
+            Данные остаются внутри компании
+          </div>
+          <div class="trust__item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5a2 2 0 012-2h9l5 5v11a2 2 0 01-2 2H6a2 2 0 01-2-2z"/><path d="M8 13h8M8 17h5"/></svg>
+            Любые форматы документов
+          </div>
+          <div class="trust__item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5"/><path d="M16 11l2 2 4-4"/></svg>
+            Без нагрузки на HR и IT
+          </div>
+          <div class="trust__item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-2 8 9-12h-7z"/></svg>
+            Запуск за 5 рабочих дней
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== STATS ===== -->
+    <section class="section section--tight" id="stats">
+      <div class="wrap">
+        <div class="stats">
+          <div class="stat reveal">
+            <div class="stat__num"><span class="count" data-to="87" data-suffix="%">0</span></div>
+            <div class="stat__label">вопросов сотрудников закрываются без участия коллег</div>
+          </div>
+          <div class="stat reveal d1">
+            <div class="stat__num">&lt;&nbsp;<span class="count" data-to="5" data-suffix=" сек">0</span></div>
+            <div class="stat__label">на поиск ответа в любом документе компании</div>
+          </div>
+          <div class="stat reveal d2">
+            <div class="stat__num">×&nbsp;<span class="count" data-to="3.2" data-decimals="1">0</span></div>
+            <div class="stat__label">рост скорости онбординга новых сотрудников</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PAIN / BEFORE-AFTER ===== -->
+    <section class="section section--soft" id="pain">
+      <div class="wrap">
+        <div class="section__head reveal">
+          <span class="eyebrow"><span class="dot"></span> Проблема</span>
+          <h2 class="h-section">Знания компании есть.<br>Но добраться до них — <span class="accent">квест</span></h2>
+          <p class="lead">Документы лежат в десятках папок, на портале, в почте и в головах сотрудников. На один вопрос уходят часы — а ответ всё равно неточный.</p>
+        </div>
+        <div class="compare">
+          <div class="compare__col compare__col--bad reveal d1">
+            <span class="compare__tag compare__tag--bad">Без НЕЙРОДОКСА</span>
+            <ul>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/></svg> Сотрудник 40+ минут ищет нужный регламент</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/></svg> Одни и те же вопросы отвлекают коллег и руководителей</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/></svg> Новичок входит в работу неделями</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/></svg> Используются устаревшие версии документов</li>
+            </ul>
+          </div>
+          <div class="compare__col compare__col--good reveal d2">
+            <span class="compare__tag compare__tag--good">С НЕЙРОДОКСОМ</span>
+            <ul>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg> Ответ за секунды — со ссылкой на актуальный источник</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg> Рутинные вопросы закрываются автоматически</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg> Новый сотрудник продуктивен с первого дня</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg> Агент всегда опирается на последнюю версию</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PRODUCT ===== -->
+    <section class="section" id="product">
+      <div class="wrap">
+        <div class="section__head reveal">
+          <span class="eyebrow"><span class="dot"></span> Возможности</span>
+          <h2 class="h-section">Один агент — <span class="accent">вся база знаний</span> компании</h2>
+          <p class="lead">НЕЙРОДОКС объединяет регламенты, инструкции, договоры и базы знаний в единый интеллектуальный слой с контролем доступа.</p>
+        </div>
+        <div class="grid grid--3">
+          <article class="card reveal">
+            <div class="card__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-2 8 9-12h-7z"/></svg></div>
+            <h3>Мгновенный ответ</h3>
+            <p>Вопрос на естественном языке — точный ответ за секунды. Без поиска по папкам и опросов коллег.</p>
+          </article>
+          <article class="card reveal d1">
+            <div class="card__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg></div>
+            <h3>Внутренний контур</h3>
+            <p>Разворачивается в вашей инфраструктуре. Документы и переписка не покидают периметр компании.</p>
+          </article>
+          <article class="card reveal d2">
+            <div class="card__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div>
+            <h3>Поиск по всей базе</h3>
+            <p>Агент видит связи между документами и собирает ответ из нескольких источников сразу.</p>
+          </article>
+          <article class="card reveal">
+            <div class="card__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg></div>
+            <h3>Ответ с источником</h3>
+            <p>К каждому ответу — ссылка на документ, раздел и страницу. Легко проверить и довериться.</p>
+          </article>
+          <article class="card reveal d1">
+            <div class="card__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007 0l3-3a5 5 0 00-7-7l-1.5 1.5"/><path d="M14 11a5 5 0 00-7 0l-3 3a5 5 0 007 7l1.5-1.5"/></svg></div>
+            <h3>Интеграции</h3>
+            <p>Подключается к порталу, CRM, мессенджерам и хранилищам. Работает там, где работают сотрудники.</p>
+          </article>
+          <article class="card reveal d2">
+            <div class="card__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/><path d="M19 8l2 2 3-3" transform="translate(-4 2)"/></svg></div>
+            <h3>Контроль доступа</h3>
+            <p>Каждый сотрудник видит только то, что ему положено по роли. Полный аудит обращений.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== CASES ===== -->
+    <section class="section section--soft" id="cases">
+      <div class="wrap">
+        <div class="section__head reveal">
+          <span class="eyebrow"><span class="dot"></span> Кейсы</span>
+          <h2 class="h-section">Результаты, которые <span class="accent">видно в цифрах</span></h2>
+          <p class="lead">Компании внедряют НЕЙРОДОКС, чтобы освободить экспертов от рутины и ускорить работу с документами.</p>
+        </div>
+        <div class="cases">
+          <article class="case reveal d1">
+            <div class="case__top">
+              <span class="case__tag">Производственный холдинг</span>
+              <h3>Техдокументация на 2 языках</h3>
+              <p>400+ сотрудников. Поиск нужной инструкции занимал 40+ минут и отвлекал инженеров.</p>
+            </div>
+            <div class="case__body">
+              <div class="case__metrics">
+                <div class="metric"><b>−78%</b><span>времени на поиск документа</span></div>
+                <div class="metric"><b>×4.1</b><span>скорость онбординга</span></div>
+              </div>
+              <ul class="case__list">
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> 92% сотрудников оценили ответы как точные</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Инженеры вернулись к профильным задачам</li>
+              </ul>
+            </div>
+          </article>
+          <article class="case reveal d2">
+            <div class="case__top">
+              <span class="case__tag">Юридическая фирма</span>
+              <h3>Архив договоров за 12 лет</h3>
+              <p>3 офиса, разные версии документов. Юристы тонули в повторяющихся вопросах коллег.</p>
+            </div>
+            <div class="case__body">
+              <div class="case__metrics">
+                <div class="metric"><b>−65%</b><span>вопросов к юристам</span></div>
+                <div class="metric"><b>ROI 340%</b><span>за первый год</span></div>
+              </div>
+              <ul class="case__list">
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> В 3 раза быстрее проверка типовых условий</li>
+                <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Всегда актуальная версия договора под рукой</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== WHY US ===== -->
+    <section class="section why" id="why">
+      <div class="why__bg" aria-hidden="true"><span class="why__glow"></span><span class="hero__grid"></span></div>
+      <div class="wrap">
+        <div class="section__head reveal">
+          <span class="eyebrow eyebrow--dark"><span class="dot"></span> Почему выбирают нас</span>
+          <h2 class="h-section h-section--light">Не «ещё один чат-бот»,<br>а <span class="accent">надёжный сотрудник</span></h2>
+        </div>
+        <div class="why__grid">
+          <div class="adv reveal"><div class="adv__n">01</div><div class="adv__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg></div><h3>Безопасность по 152-ФЗ</h3><p>Полностью внутри вашего контура. Никакие данные не уходят во внешние сервисы.</p></div>
+          <div class="adv reveal d1"><div class="adv__n">02</div><div class="adv__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5"/></svg></div><h3>Ответ с доказательством</h3><p>Каждый ответ подкреплён ссылкой на документ. Никаких выдумок и галлюцинаций.</p></div>
+          <div class="adv reveal d2"><div class="adv__n">03</div><div class="adv__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-2 8 9-12h-7z"/></svg></div><h3>Быстрый запуск</h3><p>От документов до рабочего агента — 5 рабочих дней. Без долгих интеграционных проектов.</p></div>
+          <div class="adv reveal"><div class="adv__n">04</div><div class="adv__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007 0l3-3a5 5 0 00-7-7l-1.5 1.5"/><path d="M14 11a5 5 0 00-7 0l-3 3a5 5 0 007 7l1.5-1.5"/></svg></div><h3>Любые источники</h3><p>PDF, Word, таблицы, порталы, сканы. Агент работает со всем массивом знаний.</p></div>
+          <div class="adv reveal d1"><div class="adv__n">05</div><div class="adv__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></div><h3>Роли и доступы</h3><p>Гибкое разграничение прав. Сотрудник видит только разрешённые документы.</p></div>
+          <div class="adv reveal d2"><div class="adv__n">06</div><div class="adv__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></div><h3>Измеримый эффект</h3><p>Аналитика обращений показывает, где знания компании дают сбой и что улучшить.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== HOW WE WORK ===== -->
+    <section class="section" id="how">
+      <div class="wrap">
+        <div class="section__head reveal">
+          <span class="eyebrow"><span class="dot"></span> Как мы работаем</span>
+          <h2 class="h-section">От документов до агента — <span class="accent">за 3 шага</span></h2>
+        </div>
+        <div class="flow">
+          <div class="step reveal d1">
+            <div class="step__n">1</div>
+            <h3>Аудит и сбор</h3>
+            <p>Анализируем источники знаний, форматы и сценарии вопросов. Готовим план внедрения.</p>
+            <span class="step__time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> 1–2 дня</span>
+          </div>
+          <div class="step reveal d2">
+            <div class="step__n">2</div>
+            <h3>Настройка агента</h3>
+            <p>Загружаем документы во внутренний контур, настраиваем доступы и интеграции.</p>
+            <span class="step__time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> 2–3 дня</span>
+          </div>
+          <div class="step reveal d3">
+            <div class="step__n">3</div>
+            <h3>Запуск и развитие</h3>
+            <p>Запускаем для сотрудников, обучаем и развиваем агента по реальным обращениям.</p>
+            <span class="step__time"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-2 8 9-12h-7z"/></svg> с 5-го дня</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== ABOUT ===== -->
+    <section class="section section--soft" id="about">
+      <div class="wrap">
+        <div class="about">
+          <div class="about__card reveal d1">
+            <div class="about__avatar">Н</div>
+            <h3>Новиков</h3>
+            <p class="role">Основатель НЕЙРОДОКС</p>
+            <p class="about__quote">«Знания компании — её главный актив. Мы делаем так, чтобы каждый сотрудник получал ответ мгновенно, а эксперты занимались действительно важным.»</p>
+            <div class="about__sign">
+              <div><b>5 дней</b><span>средний срок запуска</span></div>
+              <div><b>100%</b><span>данные внутри контура</span></div>
+            </div>
+          </div>
+          <div class="about__text reveal d2">
+            <span class="eyebrow"><span class="dot"></span> О нас</span>
+            <h2 class="h-section">Делаем корпоративные знания <span class="accent">мгновенно доступными</span></h2>
+            <p>НЕЙРОДОКС — это команда, которая создаёт ИИ-агентов для внутреннего контура компаний. Мы соединяем экспертизу в обработке документов с требованиями к безопасности и приватности.</p>
+            <p>Наш подход — <strong>без «эффекта ИИ» ради эффекта</strong>. Только понятная польза: точные ответы со ссылкой на источник, измеримая экономия времени и спокойствие за данные.</p>
+            <a href="#contact" class="btn btn--primary">Обсудить проект
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PARTNERSHIP ===== -->
+    <section class="section" id="partnership">
+      <div class="wrap">
+        <div class="partner reveal">
+          <div class="partner__bg" aria-hidden="true"></div>
+          <div class="partner__inner">
+            <div>
+              <span class="eyebrow eyebrow--onblue"><span class="dot"></span> Партнёрство</span>
+              <h2>Зарабатывайте вместе с НЕЙРОДОКС</h2>
+              <p>Рекомендуйте НЕЙРОДОКС компаниям из вашей сети и получайте вознаграждение с каждого внедрения. Мы берём на себя продукт, внедрение и поддержку.</p>
+              <div class="partner__facts">
+                <div class="pfact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Прозрачные условия и закрепление клиента</div>
+                <div class="pfact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Маркетинговая и пресейл-поддержка</div>
+                <div class="pfact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Выплаты с каждого продления</div>
+              </div>
+              <div class="btn-row">
+                <a href="https://t.me/Novikoff_off" target="_blank" rel="noopener" class="btn btn--light">Стать партнёром</a>
+              </div>
+            </div>
+            <div class="partner__big">
+              <div class="pct">до&nbsp;30%</div>
+              <div class="sub">партнёрское вознаграждение</div>
+              <div class="divider"></div>
+              <div class="row"><span>Закрепление клиента</span><b>навсегда</b></div>
+              <div class="row"><span>Выплаты с продлений</span><b>да</b></div>
+              <div class="row"><span>Старт</span><b>за 1 день</b></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== FAQ ===== -->
+    <section class="section section--soft" id="faq">
+      <div class="wrap">
+        <div class="section__head section__head--center reveal">
+          <span class="eyebrow"><span class="dot"></span> Вопросы</span>
+          <h2 class="h-section">Частые <span class="accent">вопросы</span></h2>
+        </div>
+        <div class="faq">
+          <div class="acc reveal">
+            <button class="acc__q">Где хранятся данные?<span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
+            <div class="acc__a"><div class="acc__a-in">Все данные и документы остаются внутри вашего контура. НЕЙРОДОКС разворачивается в вашей инфраструктуре и не передаёт информацию во внешние сервисы — это соответствует требованиям 152-ФЗ.</div></div>
+          </div>
+          <div class="acc reveal">
+            <button class="acc__q">Какие форматы документов поддерживаются?<span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
+            <div class="acc__a"><div class="acc__a-in">PDF, Word, Excel, презентации, текстовые файлы, страницы внутреннего портала и даже сканы. Агент извлекает знания из любого массива документов.</div></div>
+          </div>
+          <div class="acc reveal">
+            <button class="acc__q">Как долго длится внедрение?<span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
+            <div class="acc__a"><div class="acc__a-in">В среднем 5 рабочих дней: 1–2 дня на аудит и сбор источников, 2–3 дня на настройку и интеграции, затем запуск для сотрудников.</div></div>
+          </div>
+          <div class="acc reveal">
+            <button class="acc__q">Нужен ли собственный IT-отдел?<span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
+            <div class="acc__a"><div class="acc__a-in">Нет. Мы берём на себя развёртывание, настройку и поддержку. Со стороны компании достаточно ответственного за документы и доступы.</div></div>
+          </div>
+          <div class="acc reveal">
+            <button class="acc__q">Как считается стоимость?<span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
+            <div class="acc__a"><div class="acc__a-in">Стоимость зависит от объёма документов, числа сотрудников и нужных интеграций. После короткого аудита вы получаете прозрачное предложение без скрытых платежей.</div></div>
+          </div>
+          <div class="acc reveal">
+            <button class="acc__q">Есть ли тестовый период?<span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
+            <div class="acc__a"><div class="acc__a-in">Да. Мы запускаем пилот на части ваших документов, чтобы вы увидели качество ответов на реальных вопросах до полного внедрения.</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== CONTACT ===== -->
+    <section class="section" id="contact">
+      <div class="wrap">
+        <div class="contact">
+          <div class="contact__info reveal d1">
+            <span class="eyebrow"><span class="dot"></span> Контакты</span>
+            <h2 class="h-section">Покажем НЕЙРОДОКС <span class="accent">на ваших документах</span></h2>
+            <p class="lead">Оставьте заявку — проведём демонстрацию и оценим эффект для вашей компании.</p>
+            <ul class="contact__points">
+              <li>
+                <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 01-12.5 7.5L3 21l2-5.5A8.5 8.5 0 1121 11.5z"/></svg></span>
+                <div><b>Telegram</b><span><a href="https://t.me/Novikoff_off" target="_blank" rel="noopener">@Novikoff_off</a> — ответим быстро</span></div>
+              </li>
+              <li>
+                <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg></span>
+                <div><b>Безопасность</b><span>Данные не покидают ваш контур</span></div>
+              </li>
+              <li>
+                <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-2 8 9-12h-7z"/></svg></span>
+                <div><b>Быстрый старт</b><span>Демо — в течение пары дней</span></div>
+              </li>
+            </ul>
+          </div>
+          <form class="form reveal d2" id="leadForm">
+            <h3>Запросить демо</h3>
+            <p class="sub">Заполните форму — свяжемся в течение рабочего дня.</p>
+            <div class="field"><label for="f-name">Имя</label><input id="f-name" name="name" type="text" placeholder="Как к вам обращаться" required></div>
+            <div class="field"><label for="f-company">Компания</label><input id="f-company" name="company" type="text" placeholder="Название компании"></div>
+            <div class="field"><label for="f-contact">Telegram или e-mail</label><input id="f-contact" name="contact" type="text" placeholder="@username или mail@company.ru" required></div>
+            <div class="field"><label for="f-msg">Задача</label><textarea id="f-msg" name="message" placeholder="Коротко о задаче и объёме документов"></textarea></div>
+            <button type="submit" class="btn btn--primary">Отправить заявку
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg>
+            </button>
+            <p class="form__note">Нажимая кнопку, вы соглашаетесь на обработку данных в соответствии с 152-ФЗ.</p>
+            <div class="form__ok" id="formOk">
+              <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+              <h3>Заявка отправлена!</h3>
+              <p>Спасибо! Чтобы ускорить — напишите нам в Telegram <a href="https://t.me/Novikoff_off" target="_blank" rel="noopener">@Novikoff_off</a>, пришлём демо сразу.</p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+      <div class="wrap">
+        <div class="footer__top">
+          <div>
+            <div class="footer__brand">
+              <svg width="44" height="44" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <defs>
+                  <linearGradient id="fP" x1="46" y1="14" x2="78" y2="86" gradientUnits="userSpaceOnUse"><stop stop-color="#3F7BFF"/><stop offset="1" stop-color="#1746B0"/></linearGradient>
+                  <linearGradient id="fD" x1="14" y1="14" x2="40" y2="86" gradientUnits="userSpaceOnUse"><stop stop-color="#26395A"/><stop offset="1" stop-color="#0B1626"/></linearGradient>
+                  <linearGradient id="fF" x1="64" y1="14" x2="82" y2="32" gradientUnits="userSpaceOnUse"><stop stop-color="#9DBEFF"/><stop offset="1" stop-color="#5E8DF6"/></linearGradient>
+                </defs>
+                <path d="M16 86V14C16 11.79 17.79 10 20 10H30C31.27 10 32.46 10.6 33.2 11.62L37 16.9V86C37 88.21 35.21 90 33 90H20C17.79 90 16 88.21 16 86Z" fill="url(#fD)"/>
+                <path d="M30 12L70 70V52L42 12H30Z" fill="url(#fD)" opacity="0.92"/>
+                <path d="M58 86V26L70 10H78C80.21 10 82 11.79 82 14V78L70 90H62C59.79 90 58 88.21 58 86Z" fill="url(#fP)"/>
+                <path d="M70 10V22C70 24.21 71.79 26 74 26H82L70 10Z" fill="url(#fF)"/>
+                <g stroke="#EAF1FF" stroke-width="2.6" stroke-linecap="round" opacity="0.92"><line x1="65" y1="40" x2="76" y2="40"/><line x1="65" y1="48" x2="76" y2="48"/><line x1="65" y1="56" x2="76" y2="56"/><line x1="65" y1="64" x2="73" y2="64"/></g>
+              </svg>
+              <span class="footer__brand-txt"><span class="name">НЕЙРОДОКС</span><span class="tag">Документы. Знания. Решения.</span></span>
+            </div>
+            <p>ИИ-агент внутреннего контура, который знает все документы вашей компании и отвечает за секунды.</p>
+          </div>
+          <div class="footer__col">
+            <h4>Разделы</h4>
+            <a href="#product">Продукт</a>
+            <a href="#cases">Кейсы</a>
+            <a href="#about">О нас</a>
+            <a href="#partnership">Партнёрство</a>
+            <a href="#faq">Вопросы</a>
+          </div>
+          <div class="footer__col">
+            <h4>Связаться</h4>
+            <a href="https://t.me/Novikoff_off" target="_blank" rel="noopener" class="tg">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg>
+              @Novikoff_off
+            </a>
+            <span>ИНН 920002551441</span>
+          </div>
+        </div>
+        <div class="footer__bottom">
+          <span>© 2026 НЕЙРОДОКС. Все права защищены.</span>
+          <span>Сделано с заботой о ваших данных</span>
+        </div>
+      </div>
+    </footer>
+
+  </main>
+</div>
+
+<script src="main.js?v=5"></script>
+</body>
+</html>
