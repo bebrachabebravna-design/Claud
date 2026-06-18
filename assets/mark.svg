@@ -1,26 +1,34 @@
-<svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Нейродокс">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" role="img" aria-label="НЕЙРОДОКС">
   <defs>
-    <linearGradient id="mPaper" x1="46" y1="14" x2="78" y2="86" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#3F7BFF"/>
-      <stop offset="1" stop-color="#1746B0"/>
+    <linearGradient id="gBlue" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#3B7FE8"/>
+      <stop offset="100%" stop-color="#1A52C8"/>
     </linearGradient>
-    <linearGradient id="mDark" x1="14" y1="14" x2="40" y2="86" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#1B2D49"/>
-      <stop offset="1" stop-color="#0B1626"/>
+    <linearGradient id="gDark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1C2D4A"/>
+      <stop offset="100%" stop-color="#0D1B2E"/>
     </linearGradient>
-    <linearGradient id="mFold" x1="64" y1="14" x2="82" y2="32" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#9DBEFF"/>
-      <stop offset="1" stop-color="#5E8DF6"/>
+    <linearGradient id="gFold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7EB3FF"/>
+      <stop offset="100%" stop-color="#4A8AE8"/>
     </linearGradient>
   </defs>
-  <path d="M16 86V14C16 11.79 17.79 10 20 10H30C31.27 10 32.46 10.6 33.2 11.62L37 16.9V86C37 88.21 35.21 90 33 90H20C17.79 90 16 88.21 16 86Z" fill="url(#mDark)"/>
-  <path d="M30 12L70 70V52L42 12H30Z" fill="url(#mDark)" opacity="0.92"/>
-  <path d="M58 86V26L70 10H78C80.21 10 82 11.79 82 14V78L70 90H62C59.79 90 58 88.21 58 86Z" fill="url(#mPaper)"/>
-  <path d="M70 10V22C70 24.21 71.79 26 74 26H82L70 10Z" fill="url(#mFold)"/>
-  <g stroke="#EAF1FF" stroke-width="2.6" stroke-linecap="round" opacity="0.92">
-    <line x1="65" y1="40" x2="76" y2="40"/>
-    <line x1="65" y1="48" x2="76" y2="48"/>
-    <line x1="65" y1="56" x2="76" y2="56"/>
-    <line x1="65" y1="64" x2="73" y2="64"/>
-  </g>
+
+  <!-- Dark left N stroke + diagonal -->
+  <path d="M10 90 L10 10 L24 10 L58 62 L58 10 L0 10" fill="none"/>
+  <!-- Left vertical bar (dark) -->
+  <rect x="10" y="10" width="16" height="80" rx="3" fill="url(#gDark)"/>
+  <!-- Diagonal bar (dark) -->
+  <polygon points="24,10 40,10 62,46 62,62" fill="url(#gDark)"/>
+
+  <!-- Right document shape (blue) with folded corner -->
+  <!-- Main body -->
+  <path d="M52 90 L52 28 L76 28 L76 10 L88 10 L88 87 Q88 90 85 90 Z" fill="url(#gBlue)"/>
+  <!-- Folded corner triangle -->
+  <path d="M76 10 L76 28 L88 28 Z" fill="url(#gFold)"/>
+  <!-- Document lines -->
+  <line x1="60" y1="42" x2="80" y2="42" stroke="white" stroke-width="3.5" stroke-linecap="round" opacity="0.9"/>
+  <line x1="60" y1="54" x2="80" y2="54" stroke="white" stroke-width="3.5" stroke-linecap="round" opacity="0.9"/>
+  <line x1="60" y1="66" x2="80" y2="66" stroke="white" stroke-width="3.5" stroke-linecap="round" opacity="0.9"/>
+  <line x1="60" y1="78" x2="72" y2="78" stroke="white" stroke-width="3.5" stroke-linecap="round" opacity="0.9"/>
 </svg>

@@ -1,39 +1,37 @@
-<svg width="320" height="96" viewBox="0 0 320 96" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="НЕЙРОДОКС">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 100" width="380" height="100" role="img" aria-label="НЕЙРОДОКС — Документы. Знания. Решения.">
   <defs>
-    <linearGradient id="ndPaper" x1="46" y1="14" x2="78" y2="86" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#3F7BFF"/>
-      <stop offset="1" stop-color="#1746B0"/>
+    <linearGradient id="lgBlue" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#3B7FE8"/>
+      <stop offset="100%" stop-color="#1A52C8"/>
     </linearGradient>
-    <linearGradient id="ndDark" x1="14" y1="14" x2="40" y2="86" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#16243B"/>
-      <stop offset="1" stop-color="#0B1626"/>
+    <linearGradient id="lgDark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1C2D4A"/>
+      <stop offset="100%" stop-color="#0D1B2E"/>
     </linearGradient>
-    <linearGradient id="ndFold" x1="64" y1="14" x2="82" y2="32" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#9DBEFF"/>
-      <stop offset="1" stop-color="#5E8DF6"/>
+    <linearGradient id="lgFold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7EB3FF"/>
+      <stop offset="100%" stop-color="#4A8AE8"/>
     </linearGradient>
   </defs>
 
-  <!-- Mark: stylised N built from a dark left stroke + a document right stroke -->
-  <g>
-    <!-- left vertical stroke (dark) -->
-    <path d="M16 86V14C16 11.79 17.79 10 20 10H30C31.27 10 32.46 10.6 33.2 11.62L37 16.9V86C37 88.21 35.21 90 33 90H20C17.79 90 16 88.21 16 86Z" fill="url(#ndDark)"/>
-    <!-- diagonal -->
-    <path d="M30 12L70 70V52L42 12H30Z" fill="url(#ndDark)" opacity="0.92"/>
-    <!-- right document stroke (blue paper) with folded corner -->
-    <path d="M58 86V26L70 10H78C80.21 10 82 11.79 82 14V78L70 90H62C59.79 90 58 88.21 58 86Z" fill="url(#ndPaper)"/>
-    <!-- folded corner -->
-    <path d="M70 10V22C70 24.21 71.79 26 74 26H82L70 10Z" fill="url(#ndFold)"/>
-    <!-- text lines on paper -->
-    <g stroke="#EAF1FF" stroke-width="2.4" stroke-linecap="round" opacity="0.92">
-      <line x1="65" y1="40" x2="76" y2="40"/>
-      <line x1="65" y1="48" x2="76" y2="48"/>
-      <line x1="65" y1="56" x2="76" y2="56"/>
-      <line x1="65" y1="64" x2="73" y2="64"/>
-    </g>
+  <!-- Mark (scaled to 90px height, centered vertically) -->
+  <g transform="translate(5,5) scale(0.9)">
+    <!-- Left vertical bar -->
+    <rect x="10" y="10" width="16" height="80" rx="3" fill="url(#lgDark)"/>
+    <!-- Diagonal -->
+    <polygon points="24,10 40,10 62,46 62,62" fill="url(#lgDark)"/>
+    <!-- Right document body -->
+    <path d="M52 90 L52 28 L76 28 L76 10 L88 10 L88 87 Q88 90 85 90 Z" fill="url(#lgBlue)"/>
+    <!-- Fold -->
+    <path d="M76 10 L76 28 L88 28 Z" fill="url(#lgFold)"/>
+    <!-- Lines -->
+    <line x1="60" y1="42" x2="80" y2="42" stroke="white" stroke-width="3.5" stroke-linecap="round" opacity="0.9"/>
+    <line x1="60" y1="54" x2="80" y2="54" stroke="white" stroke-width="3.5" stroke-linecap="round" opacity="0.9"/>
+    <line x1="60" y1="66" x2="80" y2="66" stroke="white" stroke-width="3.5" stroke-linecap="round" opacity="0.9"/>
+    <line x1="60" y1="78" x2="72" y2="78" stroke="white" stroke-width="3.5" stroke-linecap="round" opacity="0.9"/>
   </g>
 
   <!-- Wordmark -->
-  <text x="104" y="52" font-family="'Onest','Manrope',Arial,sans-serif" font-size="34" font-weight="700" letter-spacing="2.5" fill="#0B1E3D">НЕЙРОДОКС</text>
-  <text x="105" y="74" font-family="'Onest','Manrope',Arial,sans-serif" font-size="12.5" font-weight="500" letter-spacing="0.6" fill="#3F6FD6">Документы. Знания. Решения.</text>
+  <text x="108" y="54" font-family="'Onest','Manrope','Arial',sans-serif" font-size="32" font-weight="700" letter-spacing="2" fill="#0B1E3D">НЕЙРОДОКС</text>
+  <text x="109" y="74" font-family="'Onest','Manrope','Arial',sans-serif" font-size="12" font-weight="500" letter-spacing="0.5" fill="#2B5CC8">Документы. Знания. Решения.</text>
 </svg>
