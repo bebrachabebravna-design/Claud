@@ -1,0 +1,1780 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark" style="background:#080d20">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Нейродокс — платформа</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080D20; --bg-2:#0B1229; --panel:#0F1732; --panel-2:#141E40;
+  --line:rgba(255,255,255,.07); --line-2:rgba(255,255,255,.13);
+  --txt:#EAF0FC; --txt-2:#9AA6C4; --txt-3:#616D8C;
+  --navy:#0D1B3E;
+  --acc:#3B74FF; --acc-2:#6E9BFF; --acc-soft:rgba(59,116,255,.15);
+  --ok:#38BDF8; --warn:#F5B544; --bad:#F26D6D;
+  --shadow:0 26px 64px -24px rgba(0,0,0,.7);
+  --glow:0 18px 44px -18px rgba(59,116,255,.55);
+  --r:14px; --r-lg:20px;
+  --brand:linear-gradient(135deg,#2F63FF 0%,#5B8DEF 100%);
+  --brand-strong:linear-gradient(135deg,#1E4FE0 0%,#3B74FF 100%);
+  --brand-navy:linear-gradient(135deg,#16264F 0%,#0A1330 100%);
+  --u-bubble:linear-gradient(135deg,#2A5BEF,#4F86FF);
+  --page:
+    radial-gradient(1100px 620px at 12% -12%, rgba(59,116,255,.14), transparent 58%),
+    radial-gradient(960px 520px at 112% 4%, rgba(91,141,239,.10), transparent 55%),
+    radial-gradient(800px 800px at 90% 120%, rgba(42,91,239,.08), transparent 60%),
+    var(--bg);
+}
+[data-theme="light"]{
+  --bg:#EEF2FB; --bg-2:#E6ECF8; --panel:#FFFFFF; --panel-2:#F4F7FD;
+  --line:rgba(13,27,62,.09); --line-2:rgba(13,27,62,.16);
+  --txt:#0C1734; --txt-2:#4B5876; --txt-3:#8492AE;
+  --navy:#0D1B3E;
+  --acc:#2456E6; --acc-2:#4A7BF0; --acc-soft:rgba(36,86,230,.10);
+  --ok:#0EA5E9; --warn:#D9880B; --bad:#DC4B4B;
+  --shadow:0 22px 54px -24px rgba(16,30,60,.30);
+  --glow:0 16px 40px -18px rgba(36,86,230,.40);
+  --brand:linear-gradient(135deg,#2456E6 0%,#4A7BF0 100%);
+  --brand-strong:linear-gradient(135deg,#1B45C8 0%,#2E63EC 100%);
+  --brand-navy:linear-gradient(135deg,#1B2E5E 0%,#0D1B3E 100%);
+  --u-bubble:linear-gradient(135deg,#2456E6,#4A7BF0);
+  --page:
+    radial-gradient(1100px 620px at 12% -12%, rgba(36,86,230,.10), transparent 58%),
+    radial-gradient(960px 520px at 112% 4%, rgba(74,123,240,.08), transparent 55%),
+    var(--bg);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--page); background-attachment:fixed; color:var(--txt);
+  font-family:'Inter',-apple-system,Segoe UI,Roboto,sans-serif;
+  font-size:15px; line-height:1.55; overflow:hidden;
+  transition:background .35s ease,color .35s ease;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4,.font-d{font-family:'Manrope',sans-serif;letter-spacing:-.02em}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+input,textarea{font:inherit;color:inherit;background:none;border:none;outline:none}
+::selection{background:var(--acc-soft)}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:8px}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:20px}
+::-webkit-scrollbar-track{background:transparent}
+.gsvg{width:0;height:0;position:absolute;overflow:hidden}
+
+/* ---------- LAYOUT ---------- */
+.app{display:grid;grid-template-columns:276px 1fr;height:100vh;overflow:hidden;animation:appIn .5s ease both}
+.app.collapsed{grid-template-columns:0px 1fr}
+@keyframes appIn{from{opacity:0}to{opacity:1}}
+
+/* ---------- SIDEBAR ---------- */
+.side{
+  background:linear-gradient(180deg,color-mix(in srgb,var(--bg-2) 92%,transparent),color-mix(in srgb,var(--bg) 96%,transparent));
+  border-right:1px solid var(--line);
+  display:flex;flex-direction:column;min-width:0;overflow:hidden;
+  transition:background .35s ease;
+}
+.side-top{padding:16px 14px 10px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.logo{display:flex;align-items:center;gap:11px;min-width:0}
+.logo-mark{width:34px;height:34px;flex:0 0 34px;filter:drop-shadow(0 6px 14px rgba(47,99,255,.32))}
+.logo-txt{font-family:'Manrope';font-weight:800;font-size:15px;letter-spacing:.04em;white-space:nowrap}
+.logo-txt span{background:var(--brand);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.icon-btn{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;color:var(--txt-2);transition:.18s}
+.icon-btn:hover{background:var(--panel-2);color:var(--txt)}
+.icon-btn:active{transform:scale(.92)}
+
+.new-chat{
+  margin:6px 12px 12px;padding:12px 14px;border-radius:13px;
+  background:var(--brand);color:#fff;font-weight:600;font-size:14px;
+  display:flex;align-items:center;gap:9px;justify-content:center;
+  box-shadow:var(--glow);
+  transition:transform .16s cubic-bezier(.2,.9,.3,1.4),filter .2s,box-shadow .2s;
+}
+.new-chat:hover{filter:brightness(1.07);box-shadow:0 22px 50px -18px rgba(59,116,255,.7)}
+.new-chat:active{transform:scale(.96)}
+
+.side-scroll{flex:1;overflow-y:auto;padding:0 8px 8px}
+.side-label{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--txt-3);padding:12px 8px 7px;font-weight:600}
+.chat-item{
+  width:100%;text-align:left;padding:9px 10px;border-radius:11px;
+  display:flex;align-items:center;gap:9px;color:var(--txt-2);
+  font-size:13.5px;position:relative;transition:.16s;
+}
+.chat-item:hover{background:var(--panel-2);color:var(--txt)}
+.chat-item.active{background:var(--panel);color:var(--txt);box-shadow:inset 0 0 0 1px var(--line-2)}
+.chat-item .ci-title{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chat-item .ci-dot{width:6px;height:6px;border-radius:50%;background:var(--acc);flex:0 0 6px;opacity:0;transition:.2s}
+.chat-item.active .ci-dot{opacity:1}
+.ci-del{opacity:0;color:var(--txt-3);padding:2px;border-radius:6px;transition:.15s}
+.chat-item:hover .ci-del{opacity:1}
+.ci-del:hover{color:var(--bad);background:var(--line)}
+
+.nav-btn{
+  width:100%;text-align:left;padding:10px 10px;border-radius:11px;
+  display:flex;align-items:center;gap:10px;color:var(--txt-2);font-size:13.5px;transition:.16s;
+}
+.nav-btn:hover{background:var(--panel-2);color:var(--txt)}
+.nav-btn.active{background:var(--acc-soft);color:var(--acc)}
+.nav-btn .nav-ic{width:26px;height:26px;flex:0 0 26px;border-radius:8px;display:grid;place-items:center;background:var(--panel-2);color:var(--acc);transition:.16s}
+.nav-btn.active .nav-ic{background:var(--brand);color:#fff}
+.nav-btn .badge{margin-left:auto;font-size:11px;background:var(--line);color:var(--txt-2);padding:2px 7px;border-radius:20px;font-weight:600}
+.nav-btn.active .badge{background:var(--acc);color:#fff}
+
+.side-bot{padding:10px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
+
+/* account card */
+.account{
+  display:flex;align-items:center;gap:11px;padding:10px;border-radius:14px;text-align:left;
+  background:linear-gradient(135deg,color-mix(in srgb,var(--panel) 80%,transparent),var(--panel-2));
+  border:1px solid var(--line);transition:.2s;position:relative;overflow:hidden;
+}
+.account:hover{border-color:var(--acc);box-shadow:var(--glow)}
+.account:active{transform:scale(.98)}
+.acc-av{
+  width:38px;height:38px;flex:0 0 38px;border-radius:11px;display:grid;place-items:center;
+  background:var(--brand);color:#fff;font-weight:800;font-size:14px;font-family:'Manrope';
+  box-shadow:0 8px 18px -8px rgba(59,116,255,.7);
+}
+.acc-info{flex:1;min-width:0}
+.acc-name{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.acc-role{font-size:11px;color:var(--txt-3);margin-top:1px;display:flex;align-items:center;gap:5px}
+.acc-role .rk{display:inline-flex;align-items:center;gap:4px;color:var(--acc);font-weight:600}
+.acc-chev{color:var(--txt-3);flex:0 0 auto;transition:.2s}
+.account:hover .acc-chev{color:var(--acc);transform:translateX(2px)}
+
+.side-row{display:flex;gap:8px}
+.side-row .icon-btn{flex:1;border:1px solid var(--line);background:var(--panel);height:38px;border-radius:11px}
+
+/* theme toggle */
+.tt{position:relative;width:38px;height:38px;display:grid;place-items:center;overflow:hidden}
+.tt svg{position:absolute;transition:transform .5s cubic-bezier(.6,-.4,.3,1.4),opacity .35s}
+.tt .sun{transform:translateY(0) rotate(0)}
+.tt .moon{transform:translateY(26px) rotate(-70deg);opacity:0}
+[data-theme="light"] .tt .sun{transform:translateY(-26px) rotate(70deg);opacity:0}
+[data-theme="light"] .tt .moon{transform:translateY(0) rotate(0);opacity:1}
+#reveal{position:fixed;inset:0;z-index:9999;pointer-events:none}
+
+/* ---------- MAIN ---------- */
+.main{display:flex;flex-direction:column;min-width:0;position:relative;overflow:hidden}
+.top{
+  height:62px;flex:0 0 62px;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;gap:12px;padding:0 18px;
+  background:color-mix(in srgb,var(--bg) 72%,transparent);backdrop-filter:blur(16px);z-index:20;
+}
+.top-title{font-weight:700;font-size:15px;font-family:'Manrope';white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top-sub{font-size:12px;color:var(--txt-3);margin-top:1px}
+.spacer{flex:1}
+
+/* mode pill */
+.mode-pill{
+  display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:12px;
+  border:1px solid var(--line-2);background:var(--panel);font-size:13px;font-weight:600;
+  transition:.18s;position:relative;
+}
+.mode-pill:hover{border-color:var(--acc);background:var(--panel-2)}
+.mode-pill:active{transform:scale(.97)}
+.mp-ico{width:24px;height:24px;border-radius:8px;display:grid;place-items:center;background:var(--brand);color:#fff;box-shadow:0 6px 14px -7px rgba(59,116,255,.8)}
+.mp-caret{color:var(--txt-3);transition:transform .25s}
+.mode-pill.open .mp-caret{transform:rotate(180deg)}
+
+.menu{
+  position:absolute;top:calc(100% + 8px);right:0;width:340px;z-index:60;
+  background:var(--panel);border:1px solid var(--line-2);border-radius:17px;
+  box-shadow:var(--shadow);padding:7px;
+  opacity:0;transform:translateY(-8px) scale(.97);pointer-events:none;
+  transition:opacity .2s ease,transform .24s cubic-bezier(.2,.9,.3,1.2);
+  transform-origin:top right;
+}
+.menu.show{opacity:1;transform:none;pointer-events:auto}
+.menu-h{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--txt-3);padding:8px 10px 6px;font-weight:600}
+.menu-item{
+  width:100%;display:flex;gap:11px;align-items:flex-start;padding:10px;border-radius:12px;text-align:left;transition:.15s;
+}
+.menu-item:hover{background:var(--panel-2)}
+.menu-item.sel{background:var(--acc-soft)}
+.mi-ico{width:32px;height:32px;flex:0 0 32px;border-radius:10px;display:grid;place-items:center;background:var(--panel-2);color:var(--acc);border:1px solid var(--line)}
+.menu-item.sel .mi-ico{background:var(--brand);color:#fff;border-color:transparent;box-shadow:0 6px 14px -7px rgba(59,116,255,.8)}
+.mi-t{font-size:13.5px;font-weight:600}
+.mi-d{font-size:11.5px;color:var(--txt-3);line-height:1.4;margin-top:1px}
+.mi-check{margin-left:auto;color:var(--acc);opacity:0;align-self:center}
+.menu-item.sel .mi-check{opacity:1}
+
+/* ---------- SCROLL AREA ---------- */
+.scroll{flex:1;overflow-y:auto;overflow-x:hidden;scroll-behavior:smooth}
+.wrap{max-width:820px;margin:0 auto;padding:28px 24px 24px}
+.wide{max-width:1100px}
+
+/* ---------- MODE PICKER (empty state) ---------- */
+.hero{padding:44px 24px 10px;text-align:center;animation:fadeUp .6s cubic-bezier(.2,.8,.2,1) both}
+.hero-mark{width:64px;height:64px;margin:0 auto 20px;animation:float 5.5s ease-in-out infinite;filter:drop-shadow(0 12px 26px rgba(47,99,255,.4))}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.hero h1{font-size:32px;font-weight:800;margin-bottom:9px}
+.hero h1 .hl{background:var(--brand);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:var(--txt-2);font-size:14.5px;max-width:540px;margin:0 auto}
+.hero .kbline{margin-top:16px;display:inline-flex;align-items:center;gap:8px;font-size:12.5px;color:var(--txt-2);border:1px solid var(--line);background:var(--panel);padding:7px 14px;border-radius:22px;box-shadow:var(--shadow)}
+
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:28px}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
+.card{
+  position:relative;text-align:left;padding:17px;border-radius:17px;
+  background:linear-gradient(160deg,var(--panel),color-mix(in srgb,var(--panel-2) 60%,var(--panel)));
+  border:1px solid var(--line);overflow:hidden;
+  transition:transform .3s cubic-bezier(.2,.9,.3,1.2),border-color .25s,box-shadow .3s;
+  animation:fadeUp .55s cubic-bezier(.2,.8,.2,1) both;
+}
+.card:hover{transform:translateY(-4px);border-color:var(--acc);box-shadow:var(--glow)}
+.card:active{transform:translateY(-1px) scale(.985)}
+.card::after{
+  content:"";position:absolute;inset:0;opacity:0;transition:opacity .35s;pointer-events:none;
+  background:radial-gradient(420px circle at var(--mx,50%) var(--my,0%),var(--acc-soft),transparent 60%);
+}
+.card:hover::after{opacity:1}
+.c-ico{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;background:var(--brand);color:#fff;margin-bottom:13px;transition:.3s;box-shadow:0 10px 22px -10px rgba(59,116,255,.8)}
+.card:hover .c-ico{transform:scale(1.06) rotate(-3deg)}
+.card h3{font-size:14.5px;font-weight:700;margin-bottom:5px}
+.card p{font-size:12.5px;color:var(--txt-3);line-height:1.5}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* ---------- MESSAGES ---------- */
+.msg{display:flex;gap:13px;margin-bottom:26px;animation:fadeUp .45s cubic-bezier(.2,.8,.2,1) both}
+.msg.user{flex-direction:row-reverse}
+.av{width:32px;height:32px;flex:0 0 32px;border-radius:10px;display:grid;place-items:center;font-size:11px;font-weight:700}
+.av.ai{background:var(--brand);box-shadow:0 8px 18px -9px rgba(59,116,255,.8)}
+.av.me{background:var(--panel-2);border:1px solid var(--line);color:var(--txt-2)}
+.bubble-u{
+  background:var(--u-bubble);color:#fff;padding:11px 15px;border-radius:16px 16px 4px 16px;
+  max-width:76%;font-size:14.5px;box-shadow:var(--glow);
+}
+.body{flex:1;min-width:0;padding-top:4px}
+.body p{margin-bottom:10px;font-size:14.8px}
+.body p:last-child{margin-bottom:0}
+.body strong{font-weight:600;color:var(--txt)}
+.body ul{margin:0 0 10px 18px}
+
+/* thinking */
+.think{
+  border:1px solid var(--line);background:var(--panel);border-radius:14px;padding:12px 14px;
+  display:inline-flex;flex-direction:column;gap:2px;min-width:280px;
+}
+.th-row{display:flex;align-items:center;gap:9px;font-size:12.8px;color:var(--txt-3);padding:3px 0;opacity:.4;transition:opacity .3s,color .3s}
+.th-row.on{opacity:1;color:var(--txt-2)}
+.th-row.done{opacity:1;color:var(--txt-3)}
+.th-ic{width:15px;height:15px;flex:0 0 15px;display:grid;place-items:center}
+.spin{width:12px;height:12px;border:1.6px solid var(--line-2);border-top-color:var(--acc);border-radius:50%;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.th-bar{height:3px;border-radius:3px;background:var(--line);margin-top:8px;overflow:hidden}
+.th-bar i{display:block;height:100%;width:0;background:var(--brand);transition:width .5s ease}
+
+/* cursor */
+.cursor{display:inline-block;width:7px;height:15px;background:var(--acc);margin-left:2px;border-radius:1px;animation:bl .9s steps(2) infinite;vertical-align:-2px}
+@keyframes bl{50%{opacity:0}}
+
+/* citations */
+.cite{
+  display:inline-flex;align-items:center;gap:6px;margin:6px 6px 0 0;padding:5px 10px 5px 6px;
+  border-radius:10px;border:1px solid var(--line-2);background:var(--panel);
+  font-size:12px;color:var(--txt-2);font-weight:500;transition:.18s;
+}
+.cite:hover{border-color:var(--acc);color:var(--acc);background:var(--acc-soft);transform:translateY(-1px)}
+.cite:active{transform:translateY(0) scale(.97)}
+.cite .cn{width:18px;height:18px;border-radius:6px;background:var(--brand);color:#fff;display:grid;place-items:center;font-size:10px;font-weight:700;font-family:'JetBrains Mono'}
+.cites-h{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--txt-3);margin-top:14px;font-weight:600}
+.msg-tools{display:flex;gap:4px;margin-top:12px;opacity:0;transition:opacity .25s}
+.msg:hover .msg-tools{opacity:1}
+.tool{padding:5px;border-radius:8px;color:var(--txt-3);transition:.15s}
+.tool:hover{background:var(--panel-2);color:var(--txt)}
+
+/* suggestion chips */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chip{
+  padding:8px 14px;border-radius:22px;border:1px solid var(--line);background:var(--panel);
+  font-size:13px;color:var(--txt-2);transition:.2s;animation:fadeUp .5s both;
+}
+.chip:hover{border-color:var(--acc);color:var(--acc);transform:translateY(-2px);box-shadow:var(--glow)}
+.chip:active{transform:translateY(0) scale(.96)}
+
+/* ---------- COMPOSER ---------- */
+.composer-w{padding:0 24px 20px;background:linear-gradient(to top,var(--bg) 62%,transparent);position:relative;z-index:15}
+.composer{
+  max-width:820px;margin:0 auto;background:var(--panel);border:1px solid var(--line-2);
+  border-radius:19px;padding:8px 8px 8px 14px;box-shadow:var(--shadow);
+  transition:border-color .25s,box-shadow .25s;
+}
+.composer:focus-within{border-color:var(--acc);box-shadow:0 0 0 4px var(--acc-soft),var(--shadow)}
+.cmp-mode{
+  display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--acc);
+  background:var(--acc-soft);padding:4px 10px;border-radius:8px;margin:2px 0 6px;transition:.16s;
+}
+.cmp-mode:hover{filter:brightness(1.1)}
+.cmp-mode:active{transform:scale(.96)}
+.cmp-row{display:flex;align-items:flex-end;gap:8px}
+#ta{flex:1;resize:none;max-height:170px;font-size:15px;line-height:1.5;padding:5px 0 7px}
+#ta::placeholder{color:var(--txt-3)}
+.send{
+  width:38px;height:38px;flex:0 0 38px;border-radius:12px;background:var(--brand);color:#fff;
+  display:grid;place-items:center;box-shadow:0 8px 18px -9px rgba(59,116,255,.8);
+  transition:transform .2s cubic-bezier(.2,.9,.3,1.5),opacity .2s,filter .2s;
+}
+.send:hover{filter:brightness(1.09)}
+.send:active{transform:scale(.9)}
+.send:disabled{opacity:.32;cursor:default;box-shadow:none}
+.send.stop{background:var(--bad);box-shadow:none}
+.cmp-foot{max-width:820px;margin:9px auto 0;font-size:11px;color:var(--txt-3);text-align:center;display:flex;justify-content:center;gap:14px;align-items:center;flex-wrap:wrap}
+.cmp-foot b{color:var(--txt-2);font-weight:600}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--txt-3);display:inline-block;margin-right:5px}
+.live-dot.on{background:var(--ok);animation:pulse 2.6s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--ok) 55%,transparent)}70%{box-shadow:0 0 0 7px transparent}100%{box-shadow:0 0 0 0 transparent}}
+
+/* ---------- DOCS VIEW ---------- */
+.dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:13px;margin-top:16px}
+.doc{
+  text-align:left;padding:16px;border-radius:16px;
+  background:linear-gradient(160deg,var(--panel),color-mix(in srgb,var(--panel-2) 55%,var(--panel)));
+  border:1px solid var(--line);
+  transition:transform .28s cubic-bezier(.2,.9,.3,1.2),border-color .2s,box-shadow .3s;position:relative;overflow:hidden;
+  animation:fadeUp .5s both;
+}
+.doc:hover{transform:translateY(-4px);border-color:var(--acc);box-shadow:var(--glow)}
+.doc:active{transform:translateY(-1px) scale(.99)}
+.doc-top{display:flex;align-items:center;gap:9px;margin-bottom:11px}
+.doc-ic{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--brand);color:#fff;flex:0 0 34px;box-shadow:0 8px 16px -9px rgba(59,116,255,.8)}
+.doc-code{font-family:'JetBrains Mono';font-size:11px;color:var(--txt-3)}
+.doc h4{font-size:14px;font-weight:700;line-height:1.35;margin-bottom:10px}
+.doc-meta{display:flex;gap:6px;flex-wrap:wrap;font-size:11px;color:var(--txt-3)}
+.pill{padding:3px 8px;border-radius:7px;background:var(--panel-2);border:1px solid var(--line);font-weight:500}
+.st{display:inline-flex;align-items:center;gap:5px;font-weight:600;padding:3px 8px;border-radius:7px;font-size:11px}
+.st.ok{color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent)}
+.st.warn{color:var(--warn);background:color-mix(in srgb,var(--warn) 15%,transparent)}
+.st.old{color:var(--bad);background:color-mix(in srgb,var(--bad) 13%,transparent)}
+.doc-bar{height:3px;background:var(--line);border-radius:3px;margin-top:12px;overflow:hidden}
+.doc-bar i{display:block;height:100%;background:var(--brand);width:100%}
+
+.dz{
+  border:1.5px dashed var(--line-2);border-radius:16px;padding:24px;text-align:center;
+  color:var(--txt-3);font-size:13px;transition:.25s;background:var(--panel-2);
+}
+.dz.over{border-color:var(--acc);background:var(--acc-soft);color:var(--acc)}
+.dz b{color:var(--txt);font-weight:600}
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-top:18px}
+@media(max-width:760px){.stat-row{grid-template-columns:repeat(2,1fr)}}
+.stat{background:linear-gradient(160deg,var(--panel),color-mix(in srgb,var(--panel-2) 55%,var(--panel)));border:1px solid var(--line);border-radius:15px;padding:15px}
+.stat .v{font-family:'Manrope';font-size:23px;font-weight:800;letter-spacing:-.03em}
+.stat .l{font-size:11.5px;color:var(--txt-3);margin-top:2px}
+
+/* ---------- DOC PANEL (slide over) ---------- */
+.ov{position:fixed;inset:0;background:rgba(4,9,22,.6);backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .3s;z-index:80}
+.ov.show{opacity:1;pointer-events:auto}
+.panel{
+  position:fixed;top:0;right:0;bottom:0;width:min(560px,92vw);z-index:90;
+  background:var(--panel);border-left:1px solid var(--line-2);display:flex;flex-direction:column;
+  transform:translateX(102%);transition:transform .42s cubic-bezier(.3,1,.3,1);box-shadow:var(--shadow);
+}
+.panel.show{transform:none}
+.p-top{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;gap:12px;align-items:flex-start}
+.p-top h3{font-size:15.5px;font-weight:700;line-height:1.35}
+.p-meta{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;font-size:11px;color:var(--txt-3)}
+.p-body{flex:1;overflow-y:auto;padding:8px 18px 28px}
+.sec{padding:14px;border-radius:13px;border:1px solid transparent;margin-top:8px;transition:.3s}
+.sec:hover{background:var(--panel-2)}
+.sec h5{font-size:13.5px;font-weight:700;margin-bottom:6px;display:flex;gap:9px;align-items:center}
+.sec .num{font-family:'JetBrains Mono';font-size:11px;color:var(--acc);background:var(--acc-soft);padding:2px 7px;border-radius:6px}
+.sec p{font-size:13.8px;color:var(--txt-2);line-height:1.65}
+.sec.hit{border-color:var(--acc);background:var(--acc-soft);animation:hit 1.6s ease}
+@keyframes hit{0%{box-shadow:0 0 0 0 var(--acc-soft)}35%{box-shadow:0 0 0 8px transparent}100%{box-shadow:none}}
+
+/* ---------- MODALS ---------- */
+.modal{
+  position:fixed;left:50%;top:50%;z-index:95;width:min(520px,92vw);
+  background:var(--panel);border:1px solid var(--line-2);border-radius:20px;box-shadow:var(--shadow);
+  transform:translate(-50%,-46%) scale(.95);opacity:0;pointer-events:none;
+  transition:opacity .25s,transform .35s cubic-bezier(.2,.9,.3,1.2);
+}
+.modal.show{opacity:1;transform:translate(-50%,-50%);pointer-events:auto}
+.m-top{padding:18px 20px 12px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+.m-top h3{font-size:16px;font-weight:700;flex:1}
+.m-body{padding:18px 20px;max-height:70vh;overflow-y:auto}
+.fld{margin-bottom:14px}
+.fld label{display:block;font-size:12px;color:var(--txt-2);margin-bottom:6px;font-weight:600}
+.fld input,.fld select{
+  width:100%;background:var(--panel-2);border:1px solid var(--line);border-radius:11px;padding:10px 12px;
+  font-size:13.5px;transition:.2s;
+}
+.fld input:focus,.fld select:focus{border-color:var(--acc);box-shadow:0 0 0 3px var(--acc-soft)}
+.fld .hint{font-size:11px;color:var(--txt-3);margin-top:5px;line-height:1.5}
+.switch{display:flex;align-items:center;justify-content:space-between;padding:12px;border-radius:13px;background:var(--panel-2);border:1px solid var(--line);margin-bottom:14px}
+.sw{width:44px;height:25px;border-radius:20px;background:var(--line-2);position:relative;transition:.28s;flex:0 0 44px}
+.sw i{position:absolute;top:3px;left:3px;width:19px;height:19px;border-radius:50%;background:#fff;transition:.3s cubic-bezier(.2,.9,.3,1.4);box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.sw.on{background:var(--brand)}
+.sw.on i{left:22px}
+.btn{
+  padding:10px 16px;border-radius:12px;font-size:13.5px;font-weight:600;
+  transition:transform .16s cubic-bezier(.2,.9,.3,1.4),filter .2s,background .2s;
+}
+.btn:active{transform:scale(.96)}
+.btn.pri{background:var(--brand);color:#fff;box-shadow:0 10px 22px -12px rgba(59,116,255,.9)}
+.btn.pri:hover{filter:brightness(1.08)}
+.btn.gh{border:1px solid var(--line-2);color:var(--txt-2)}
+.btn.gh:hover{background:var(--panel-2);color:var(--txt)}
+.m-foot{padding:14px 20px;border-top:1px solid var(--line);display:flex;gap:9px;justify-content:flex-end}
+
+/* account modal */
+.acc-hero{display:flex;align-items:center;gap:14px;padding:4px 0 16px}
+.acc-hero .big{width:56px;height:56px;flex:0 0 56px;border-radius:16px;display:grid;place-items:center;background:var(--brand);color:#fff;font-weight:800;font-size:20px;font-family:'Manrope';box-shadow:0 12px 26px -12px rgba(59,116,255,.9)}
+.acc-hero .n{font-size:17px;font-weight:800;font-family:'Manrope'}
+.acc-hero .r{font-size:12.5px;color:var(--txt-2);margin-top:3px;display:flex;align-items:center;gap:6px}
+.role-chip{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;color:#fff;background:var(--brand);padding:3px 9px;border-radius:8px;box-shadow:0 6px 14px -8px rgba(59,116,255,.9)}
+.acc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:6px 0 14px}
+.acc-tile{background:var(--panel-2);border:1px solid var(--line);border-radius:13px;padding:12px}
+.acc-tile .k{font-size:11px;color:var(--txt-3)}
+.acc-tile .val{font-size:14px;font-weight:700;margin-top:3px;font-family:'Manrope'}
+.rights{display:flex;flex-direction:column;gap:2px;margin-top:4px}
+.right{display:flex;align-items:center;gap:10px;padding:9px 4px;font-size:13.2px;color:var(--txt-2);border-bottom:1px solid var(--line)}
+.right:last-child{border:none}
+.right .rc{width:22px;height:22px;flex:0 0 22px;border-radius:7px;display:grid;place-items:center;background:var(--acc-soft);color:var(--acc)}
+.right.off{color:var(--txt-3)}
+.right.off .rc{background:var(--line);color:var(--txt-3)}
+.right b{color:var(--txt);font-weight:600}
+
+/* ---------- WIDGETS ---------- */
+.w{border:1px solid var(--line);background:linear-gradient(160deg,var(--panel),color-mix(in srgb,var(--panel-2) 45%,var(--panel)));border-radius:16px;overflow:hidden;margin-top:6px}
+.w-top{padding:13px 15px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+.w-top h4{font-size:13.5px;font-weight:700;flex:1}
+.w-body{padding:14px 15px}
+.scan{display:flex;align-items:center;gap:10px;padding:8px 0;font-size:13px;border-bottom:1px solid var(--line);opacity:0;transform:translateX(-6px);animation:slideIn .4s forwards}
+.scan:last-child{border:none}
+@keyframes slideIn{to{opacity:1;transform:none}}
+.scan .nm{flex:1;color:var(--txt-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bars{display:flex;flex-direction:column;gap:11px}
+.bar-row{display:grid;grid-template-columns:1fr 42px;gap:10px;align-items:center;font-size:12.8px}
+.bar-l{color:var(--txt-2);margin-bottom:5px}
+.bar-t{height:8px;border-radius:6px;background:var(--panel-2);overflow:hidden;border:1px solid var(--line)}
+.bar-t i{display:block;height:100%;background:var(--brand);width:0;border-radius:6px;transition:width 1.1s cubic-bezier(.2,.9,.3,1)}
+.bar-v{font-family:'JetBrains Mono';font-size:12px;color:var(--txt);text-align:right;font-weight:500}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.kpi{background:var(--panel-2);border:1px solid var(--line);border-radius:13px;padding:12px}
+.kpi .v{font-family:'Manrope';font-size:19px;font-weight:800}
+.kpi .l{font-size:11px;color:var(--txt-3);margin-top:1px}
+.note{margin-top:12px;padding:11px 12px;border-radius:12px;background:var(--acc-soft);border:1px solid color-mix(in srgb,var(--acc) 25%,transparent);font-size:12.8px;color:var(--txt-2);line-height:1.55}
+.note b{color:var(--txt)}
+.docgen{font-family:'JetBrains Mono';font-size:12.2px;line-height:1.75;color:var(--txt-2);white-space:pre-wrap;background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:14px;max-height:330px;overflow:auto}
+.w-acts{display:flex;gap:8px;padding:0 15px 14px;flex-wrap:wrap}
+
+/* toast */
+.toasts{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:200;display:flex;flex-direction:column;gap:8px;align-items:center}
+.toast{
+  background:var(--panel);border:1px solid var(--line-2);border-radius:13px;padding:10px 15px;
+  font-size:13px;box-shadow:var(--shadow);display:flex;gap:9px;align-items:center;
+  animation:tin .4s cubic-bezier(.2,.9,.3,1.3) both;
+}
+@keyframes tin{from{opacity:0;transform:translateY(14px) scale(.94)}to{opacity:1;transform:none}}
+.toast.out{animation:tout .3s forwards}
+@keyframes tout{to{opacity:0;transform:translateY(8px) scale(.96)}}
+
+/* ripple */
+.rp{position:absolute;border-radius:50%;background:currentColor;opacity:.22;transform:scale(0);animation:rip .6s ease-out forwards;pointer-events:none}
+@keyframes rip{to{transform:scale(2.6);opacity:0}}
+.new-chat,.btn,.card,.chip,.doc,.mode-pill,.cite,.send,.account{position:relative;overflow:hidden}
+
+.mobile-only{display:none}
+@media(max-width:860px){
+  .app{grid-template-columns:0 1fr}
+  .side{position:fixed;left:0;top:0;bottom:0;width:276px;z-index:100;transform:translateX(-102%);transition:transform .35s cubic-bezier(.3,1,.3,1)}
+  .app.mopen .side{transform:none}
+  .mobile-only{display:grid}
+  .grid{grid-template-columns:1fr}
+  .kpis{grid-template-columns:1fr 1fr}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<!-- shared gradient defs for the brand mark -->
+<svg class="gsvg" aria-hidden="true"><defs>
+  <linearGradient id="ndNavy" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#1B2E5E"/><stop offset="1" stop-color="#0A1330"/>
+  </linearGradient>
+  <linearGradient id="ndBlue" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#5B8DEF"/><stop offset="1" stop-color="#2A5BEF"/>
+  </linearGradient>
+</defs></svg>
+
+<div class="app" id="app">
+  <!-- SIDEBAR -->
+  <aside class="side">
+    <div class="side-top">
+      <div class="logo">
+        <span class="logo-mark" id="sideLogo"></span>
+        <div class="logo-txt">НЕЙРО<span>ДОКС</span></div>
+      </div>
+      <button class="icon-btn" id="collapse" title="Свернуть панель" aria-label="Свернуть панель">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h10M4 18h16"/></svg>
+      </button>
+    </div>
+
+    <button class="new-chat" id="newChat">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      Новый чат
+    </button>
+
+    <div class="side-scroll">
+      <button class="nav-btn" id="navDocs">
+        <span class="nav-ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></span>
+        Загруженные документы
+        <span class="badge" id="docCount">12</span>
+      </button>
+      <div class="side-label">История</div>
+      <div id="chatList"></div>
+    </div>
+
+    <div class="side-bot">
+      <button class="account" id="accountBtn" title="Ваш аккаунт">
+        <span class="acc-av">АП</span>
+        <span class="acc-info">
+          <span class="acc-name">Алексей Петров</span>
+          <span class="acc-role"><span class="rk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/><path d="M4 21c0-3.3 3.6-6 8-6s8 2.7 8 6"/></svg>Руководитель</span> · полный доступ</span>
+        </span>
+        <svg class="acc-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+      <div class="side-row">
+        <button class="icon-btn tt" id="themeBtn" title="Сменить тему" aria-label="Сменить тему">
+          <svg class="sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+          <svg class="moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>
+        </button>
+        <button class="icon-btn" id="settingsBtn" title="Настройки" aria-label="Настройки">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <header class="top">
+      <button class="icon-btn mobile-only" id="burger" aria-label="Меню">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <div style="min-width:0">
+        <div class="top-title" id="topTitle">Новый чат</div>
+        <div class="top-sub" id="topSub">База знаний: 12 документов · 199 страниц</div>
+      </div>
+      <div class="spacer"></div>
+      <div style="position:relative">
+        <button class="mode-pill" id="modeBtn">
+          <span class="mp-ico" id="modeIco"></span>
+          <span id="modeName">Умный поиск</span>
+          <svg class="mp-caret" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="menu" id="modeMenu">
+          <div class="menu-h">Режим агента</div>
+          <div id="modeItems"></div>
+        </div>
+      </div>
+    </header>
+
+    <div class="scroll" id="scroll">
+      <div id="view"></div>
+    </div>
+
+    <div class="composer-w" id="composerWrap">
+      <div class="composer">
+        <button class="cmp-mode" id="cmpMode">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M8 3v3a2 2 0 0 1-2 2H3M16 3v3a2 2 0 0 0 2 2h3M8 21v-3a2 2 0 0 0-2-2H3M16 21v-3a2 2 0 0 1 2-2h3"/></svg>
+          <span id="cmpModeName">Умный поиск</span>
+        </button>
+        <div class="cmp-row">
+          <textarea id="ta" rows="1" placeholder="Спросите обычными словами — например, «какой лимит на экстренный ремонт в рейсе?»"></textarea>
+          <button class="send" id="send" disabled aria-label="Отправить">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="cmp-foot">
+        <span><span class="live-dot" id="liveDot"></span><span id="liveTxt">Демо-режим · встроенная база</span></span>
+        <span>·</span>
+        <span>Агент отвечает <b>только по вашим документам</b> и всегда показывает источник</span>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- DOC PANEL -->
+<div class="ov" id="ov"></div>
+<aside class="panel" id="panel" aria-hidden="true">
+  <div class="p-top">
+    <div class="doc-ic" style="width:38px;height:38px;flex:0 0 38px">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+    </div>
+    <div style="flex:1;min-width:0">
+      <h3 id="pTitle">—</h3>
+      <div class="p-meta" id="pMeta"></div>
+    </div>
+    <button class="icon-btn" id="pClose" aria-label="Закрыть">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="p-body" id="pBody"></div>
+</aside>
+
+<!-- ACCOUNT MODAL -->
+<div class="modal" id="accModal" role="dialog" aria-modal="true">
+  <div class="m-top">
+    <h3>Аккаунт</h3>
+    <button class="icon-btn" id="accClose" aria-label="Закрыть">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="m-body">
+    <div class="acc-hero">
+      <div class="big">АП</div>
+      <div>
+        <div class="n">Алексей Петров</div>
+        <div class="r"><span class="role-chip"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/><path d="M4 21c0-3.3 3.6-6 8-6s8 2.7 8 6"/></svg>Руководитель</span> · a.petrov@company.ru</div>
+      </div>
+    </div>
+    <div class="acc-grid">
+      <div class="acc-tile"><div class="k">Компания</div><div class="val">ООО «Логистик Плюс»</div></div>
+      <div class="acc-tile"><div class="k">Уровень доступа</div><div class="val">Полный</div></div>
+      <div class="acc-tile"><div class="k">Отделов под управлением</div><div class="val">7</div></div>
+      <div class="acc-tile"><div class="k">Сотрудников в контуре</div><div class="val">142</div></div>
+    </div>
+    <div class="side-label" style="padding-left:0">Права доступа</div>
+    <div class="rights">
+      <div class="right"><span class="rc"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span><b>Все документы компании</b> — чтение и загрузка</span></div>
+      <div class="right"><span class="rc"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span><b>Аналитика и отчёты руководителю</b> по всем отделам</span></div>
+      <div class="right"><span class="rc"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span><b>Управление доступами</b> сотрудников и ролями</span></div>
+      <div class="right"><span class="rc"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span><span><b>Проверка базы</b> и назначение ответственных</span></div>
+    </div>
+    <div class="note" style="margin-top:14px"><b>Роль «Руководитель».</b> Вы видите вопросы всех сотрудников и сводные отчёты. У рядовых сотрудников доступ ограничен документами их отдела — переключить роль можно в разделе управления доступами.</div>
+  </div>
+  <div class="m-foot">
+    <button class="btn gh" id="accManage">Управление доступами</button>
+    <button class="btn pri" id="accOk">Готово</button>
+  </div>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div class="modal" id="setModal" role="dialog" aria-modal="true">
+  <div class="m-top">
+    <h3>Настройки</h3>
+    <button class="icon-btn" id="setClose" aria-label="Закрыть">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="m-body">
+    <div class="switch">
+      <div>
+        <div style="font-size:13.5px;font-weight:600">Подключить ИИ</div>
+        <div style="font-size:11.5px;color:var(--txt-3);margin-top:2px">Ответы будет генерировать модель по вашим документам</div>
+      </div>
+      <button class="sw" id="swLive" aria-label="Подключить ИИ"><i></i></button>
+    </div>
+    <div id="liveFields" style="display:none">
+      <div class="fld">
+        <label for="fUrl">Адрес API</label>
+        <input id="fUrl" placeholder="https://api.polza.ai/api/v1/chat/completions">
+        <div class="hint">Любой OpenAI-совместимый endpoint. Ключ и адрес живут только в этой вкладке и никуда не отправляются, кроме самого API.</div>
+      </div>
+      <div class="fld">
+        <label for="fKey">Ключ API</label>
+        <input id="fKey" type="password" placeholder="sk-...">
+      </div>
+      <div class="fld">
+        <label for="fModel">Модель</label>
+        <input id="fModel" placeholder="gpt-4o-mini">
+      </div>
+      <div class="note" style="margin-top:4px">
+        <b>Как это работает.</b> Платформа сама находит нужные пункты в базе и передаёт их модели вместе с вопросом — поэтому ответ идёт со ссылкой на документ. Если API не ответит, агент вернётся к встроенным ответам и демо не прервётся.
+      </div>
+    </div>
+    <div id="demoNote" class="note">
+      <b>Демо-режим.</b> Агент отвечает по встроенной базе — мгновенно и без интернета. Включите «Подключить ИИ», когда захотите отвечать живой моделью.
+    </div>
+  </div>
+  <div class="m-foot">
+    <button class="btn gh" id="setCancel">Отмена</button>
+    <button class="btn pri" id="setSave">Сохранить</button>
+  </div>
+</div>
+
+<div class="toasts" id="toasts"></div>
+<div id="reveal"></div>
+
+<script>
+/* ================= BRAND MARK ================= */
+// Faithful recreation of the Нейродокс logo: navy "N" leg + diagonal, blue document with white lines.
+const LOGO = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M15 51 V17 L40 49" stroke="url(#ndNavy)" stroke-width="11.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M41 12 h8 l7 7 v30 a4.5 4.5 0 0 1 -4.5 4.5 h-11 a4.5 4.5 0 0 1 -4.5 -4.5 V16.5 A4.5 4.5 0 0 1 40.5 12 Z" fill="url(#ndBlue)"/>
+  <path d="M49 12 v7 h7 Z" fill="#ffffff" fill-opacity=".22"/>
+  <path d="M49 12 v7 h7" fill="none" stroke="#ffffff" stroke-opacity=".55" stroke-width="1.3" stroke-linejoin="round"/>
+  <g fill="#ffffff">
+    <rect x="37.5" y="28" width="13" height="2.4" rx="1.2"/>
+    <rect x="37.5" y="34.5" width="13" height="2.4" rx="1.2"/>
+    <rect x="37.5" y="41" width="13" height="2.4" rx="1.2"/>
+    <rect x="37.5" y="47.5" width="9" height="2.4" rx="1.2"/>
+  </g>
+</svg>`;
+// Simplified monochrome mark for tiny avatars.
+const MARK = '<svg width="16" height="16" viewBox="0 0 32 32" fill="none"><path d="M9 24 V9 L23 24 V9" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+/* ================= DATA ================= */
+const DOCS = [
+  {id:'d1', code:'РГ-01', title:'Регламент грузоперевозок', dept:'Логистика', ver:'4.2', updated:'12.05.2026', status:'ok', pages:24, sections:[
+    {id:'1.1', title:'Приём заявки от клиента', text:'Заявка на перевозку принимается и подтверждается в течение 2 рабочих часов с момента поступления. Заявки, поступившие после 18:00, подтверждаются до 11:00 следующего рабочего дня. Диспетчер обязан зафиксировать заявку в системе и присвоить ей номер.'},
+    {id:'1.4', title:'Сроки доставки', text:'Городская доставка — до 24 часов с момента подтверждения заявки. Межрегиональная доставка — до 72 часов на плечо до 1500 км. Срок сверх норматива согласуется с клиентом письменно.'},
+    {id:'2.3', title:'Экстренный ремонт в рейсе', text:'Водитель вправе самостоятельно оплатить экстренный ремонт в рейсе на сумму до 30 000 ₽ с обязательным сохранением чеков. Ремонт свыше 30 000 ₽ согласуется с руководителем транспортного отдела до начала работ. Без согласования расходы свыше лимита не возмещаются.'},
+    {id:'3.1', title:'Простой транспорта', text:'Первые 2 часа простоя на погрузке не тарифицируются. Далее простой оплачивается по 1 200 ₽ за час. Факт простоя фиксируется отметкой в транспортной накладной.'},
+    {id:'4.2', title:'Повреждение груза', text:'При обнаружении повреждения груза водитель фиксирует его фотографией и актом в присутствии представителя склада. Претензия принимается в течение 5 рабочих дней с даты доставки.'}
+  ]},
+  {id:'d2', code:'СК-02', title:'Складской регламент', dept:'Склад', ver:'3.0', updated:'28.02.2026', status:'ok', pages:18, sections:[
+    {id:'1.2', title:'Инвентаризация', text:'Плановая инвентаризация проводится ежеквартально, в последнюю пятницу квартала. Полная годовая инвентаризация — в декабре, с 15 по 20 число. На время инвентаризации отгрузки приостанавливаются.'},
+    {id:'2.1', title:'Приёмка товара', text:'Приёмка производится в течение 4 часов с момента прибытия машины. Расхождение по количеству фиксируется актом ТОРГ-2 в день приёмки.'},
+    {id:'3.3', title:'Хранение опасных грузов', text:'Опасные грузы хранятся в отдельной секции с ограниченным доступом. Совместное хранение с пищевой продукцией запрещено.'},
+    {id:'4.1', title:'Списание и брак', text:'Брак свыше 3% от партии оформляется актом и согласуется с руководителем склада. Порог списания без согласования — 15 000 ₽.'}
+  ]},
+  {id:'d3', code:'КЛ-03', title:'Работа с клиентами и продажи', dept:'Продажи', ver:'5.1', updated:'03.06.2026', status:'ok', pages:22, sections:[
+    {id:'2.2', title:'Скидки и полномочия', text:'Скидка до 15% предоставляется руководителем отдела продаж без дополнительных согласований. Скидка от 15% до 25% согласуется с коммерческим директором в письменном виде. Скидка свыше 25% — только по решению генерального директора.'},
+    {id:'2.5', title:'VIP-клиенты', text:'VIP-статус присваивается клиенту с оборотом от 1 500 000 ₽ в квартал или от 20 отгрузок в месяц. Условия для VIP: базовая скидка 12%, отсрочка платежа 30 дней, персональный менеджер, приоритетная подача транспорта в течение 4 часов.'},
+    {id:'3.1', title:'Отсрочка платежа', text:'Стандартная отсрочка — 14 календарных дней. Отсрочка свыше 30 дней согласуется с финансовым отделом и требует проверки контрагента.'},
+    {id:'4.4', title:'Работа с претензией клиента', text:'Претензия регистрируется в день поступления. Ответ клиенту направляется в течение 10 рабочих дней. Менеджер обязан уведомить клиента о регистрации в течение 1 рабочего дня.'}
+  ]},
+  {id:'d4', code:'ТР-04', title:'Транспорт и техобслуживание', dept:'Транспорт', ver:'2.4', updated:'19.01.2026', status:'warn', pages:16, sections:[
+    {id:'1.1', title:'Плановое ТО', text:'Плановое техническое обслуживание проводится каждые 15 000 км пробега либо раз в 6 месяцев — в зависимости от того, что наступит раньше.'},
+    {id:'2.2', title:'Выпуск на линию', text:'Выпуск транспорта на линию без отметки механика и предрейсового медосмотра запрещён. Путевой лист без отметок считается недействительным.'},
+    {id:'3.1', title:'Топливные карты', text:'Перерасход топлива свыше 7% от нормы разбирается с водителем и удерживается по решению руководителя транспортного отдела.'}
+  ]},
+  {id:'d5', code:'ЗК-05', title:'Закупки и работа с подрядчиками', dept:'Закупки', ver:'1.8', updated:'22.11.2025', status:'warn', pages:14, sections:[
+    {id:'1.3', title:'Порог закупки', text:'Закупка до 100 000 ₽ — одно коммерческое предложение. От 100 000 до 500 000 ₽ — не менее трёх КП. Свыше 500 000 ₽ — тендерная процедура.'},
+    {id:'2.1', title:'Проверка контрагента', text:'До заключения договора подрядчик проверяется на действующие исполнительные производства, налоговую задолженность и срок регистрации не менее 12 месяцев.'}
+  ]},
+  {id:'d6', code:'ИБ-06', title:'Политика информационной безопасности', dept:'ИБ', ver:'3.2', updated:'08.04.2026', status:'ok', pages:20, sections:[
+    {id:'1.2', title:'Пароли и доступы', text:'Минимальная длина пароля — 12 символов, смена — раз в 90 дней. Передача пароля коллеге запрещена, в том числе на время отпуска. Доступ передаётся через заявку в ИТ.'},
+    {id:'2.4', title:'Работа с персональными данными', text:'Персональные данные клиентов и сотрудников обрабатываются только в корпоративных системах. Выгрузка в личную почту, мессенджеры и облака запрещена. Доступ к данным выдаётся по ролям и минимально необходимому объёму.'},
+    {id:'3.1', title:'Инцидент ИБ', text:'О любом инциденте — фишинг, утечка, потеря устройства — сотрудник обязан сообщить в ИТ в течение 1 часа с момента обнаружения.'}
+  ]},
+  {id:'d7', code:'ОТ-07', title:'Охрана труда и техника безопасности', dept:'Охрана труда', ver:'2.1', updated:'14.03.2026', status:'ok', pages:26, sections:[
+    {id:'1.1', title:'Вводный инструктаж', text:'Вводный инструктаж проводится в первый рабочий день до допуска к работе. Повторный инструктаж — раз в 6 месяцев, для складского персонала — раз в 3 месяца.'},
+    {id:'2.2', title:'Средства индивидуальной защиты', text:'На складе обязательны сигнальный жилет и защитная обувь. Работа на высоте свыше 1,8 м — только со страховочной системой и нарядом-допуском.'},
+    {id:'3.4', title:'Несчастный случай', text:'О несчастном случае сообщается руководителю немедленно, комиссия создаётся в течение 24 часов.'}
+  ]},
+  {id:'d8', code:'KPI-08', title:'KPI и система мотивации', dept:'HR', ver:'4.0', updated:'01.06.2026', status:'ok', pages:12, sections:[
+    {id:'1.1', title:'KPI диспетчера', text:'Ключевые показатели диспетчера: доля заявок, подтверждённых в срок, — не ниже 95%; доля рейсов без срыва — не ниже 97%; время ответа клиенту — не более 15 минут.'},
+    {id:'2.1', title:'KPI менеджера по продажам', text:'Выполнение плана по марже — вес 50%. Отсутствие просроченной дебиторской задолженности — вес 20%. Соблюдение регламента скидок — вес 30%.'},
+    {id:'3.2', title:'Расчёт премии', text:'Премия начисляется при выполнении плана от 85%. Ниже 85% — премия не выплачивается. Выше 120% — коэффициент 1,3.'}
+  ]},
+  {id:'d9', code:'АК-09', title:'Антикоррупционная политика', dept:'Комплаенс', ver:'1.5', updated:'27.09.2025', status:'old', pages:10, sections:[
+    {id:'1.2', title:'Подарки и знаки внимания', text:'Допустимая стоимость делового подарка — до 3 000 ₽. Любой подарок дороже подлежит декларированию в комплаенс в течение 3 рабочих дней.'},
+    {id:'2.1', title:'Конфликт интересов', text:'Сотрудник обязан раскрыть родственные и финансовые связи с контрагентами до участия в выборе подрядчика.'}
+  ]},
+  {id:'d10', code:'КД-10', title:'Кадры и адаптация сотрудников', dept:'HR', ver:'2.2', updated:'16.05.2026', status:'ok', pages:15, sections:[
+    {id:'1.1', title:'Испытательный срок', text:'Испытательный срок — 3 месяца. Промежуточная оценка проводится на 30-й день, итоговая — за 5 дней до окончания срока.'},
+    {id:'2.3', title:'Первый день сотрудника', text:'В первый день сотрудник получает доступы, проходит вводный инструктаж по охране труда и знакомится с регламентом своего направления. Наставник закрепляется приказом.'},
+    {id:'3.1', title:'Отпуск', text:'Заявление на отпуск подаётся не позднее чем за 14 календарных дней. График отпусков утверждается до 15 декабря.'}
+  ]},
+  {id:'d11', code:'ДО-11', title:'Документооборот и архив', dept:'Администрация', ver:'3.1', updated:'20.02.2026', status:'ok', pages:13, sections:[
+    {id:'1.2', title:'Плановые проверки', text:'Ближайшая плановая проверка Ространснадзора — 12–14 марта. Проверка государственной инспекции труда — во II квартале. Ответственный за подготовку пакета документов — руководитель административного отдела, срок готовности — за 10 рабочих дней до даты проверки.'},
+    {id:'2.1', title:'Сроки хранения', text:'Транспортные накладные хранятся 5 лет, кадровые документы — 50 лет, договоры с контрагентами — 5 лет после окончания действия.'},
+    {id:'3.3', title:'Подписание документов', text:'Договоры свыше 1 000 000 ₽ подписывает только генеральный директор. Доверенность оформляется через юридический отдел.'}
+  ]},
+  {id:'d12', code:'ТФ-12', title:'Тарифы и коммерческие условия', dept:'Продажи', ver:'6.0', updated:'02.06.2026', status:'ok', pages:19, sections:[
+    {id:'1.1', title:'Базовый тариф', text:'Базовый тариф по городу — 4 500 ₽ за подачу до 3 часов работы. Каждый последующий час — 900 ₽.'},
+    {id:'2.2', title:'Надбавки', text:'Надбавка за срочную подачу (менее 4 часов) — 25% к тарифу. Ночная подача с 22:00 до 06:00 — надбавка 15%.'},
+    {id:'3.1', title:'Пересмотр тарифов', text:'Тарифы пересматриваются раз в полгода. Индивидуальные тарифы для VIP-клиентов согласуются с коммерческим директором.'}
+  ]}
+];
+
+const CURATED = [
+  {keys:['проверк','инспекц','ространснадзор','гит'], text:'Ближайшая плановая проверка — **Ространснадзор, 12–14 марта**. Проверка государственной инспекции труда запланирована на II квартал.\n\nПакет документов готовит руководитель административного отдела, срок готовности — **за 10 рабочих дней** до даты проверки.', cites:[['d11','1.2']]},
+  {keys:['скидк','15%','дисконт'], text:'Скидку **больше 15% руководитель отдела дать не может**.\n\n— до 15% — руководитель отдела продаж, без согласований;\n— от 15% до 25% — письменное согласование с коммерческим директором;\n— свыше 25% — только решение генерального директора.', cites:[['d3','2.2']]},
+  {keys:['инвентаризац'], text:'Плановая инвентаризация — **ежеквартально, в последнюю пятницу квартала**. Полная годовая — **в декабре, с 15 по 20 число**.\n\nНа время инвентаризации отгрузки приостанавливаются.', cites:[['d2','1.2']]},
+  {keys:['vip','вип'], text:'**VIP-статус** присваивается клиенту с оборотом **от 1 500 000 ₽ в квартал** или **от 20 отгрузок в месяц**.\n\nУсловия: базовая скидка 12%, отсрочка платежа 30 дней, персональный менеджер, приоритетная подача транспорта в течение 4 часов. Индивидуальные тарифы для VIP согласует коммерческий директор.', cites:[['d3','2.5'],['d12','3.1']]},
+  {keys:['экстренн','ремонт','поломк'], text:'Лимит на экстренный ремонт в рейсе — **до 30 000 ₽** без согласования, с обязательным сохранением чеков.\n\nВсё, что дороже, согласуется с руководителем транспортного отдела **до начала работ** — иначе расходы сверх лимита не возмещаются.', cites:[['d1','2.3']]},
+  {keys:['заявк','принять','приём заявки'], text:'Заявка от клиента принимается и подтверждается **в течение 2 рабочих часов**. Заявки после 18:00 — до 11:00 следующего рабочего дня.\n\nДиспетчер обязан зафиксировать заявку в системе и присвоить ей номер.', cites:[['d1','1.1']]},
+  {keys:['доставк','срок доставки'], text:'Сроки доставки: **по городу — до 24 часов**, **межрегиональные — до 72 часов** на плечо до 1500 км.\n\nЛюбое превышение норматива согласуется с клиентом письменно.', cites:[['d1','1.4']]},
+  {keys:['парол','доступ'], text:'Пароль — **минимум 12 символов**, смена **раз в 90 дней**. Передавать пароль коллеге нельзя, в том числе на время отпуска: доступ передаётся заявкой в ИТ.', cites:[['d6','1.2']]},
+  {keys:['простой'], text:'Первые **2 часа простоя** на погрузке не тарифицируются. Далее — **1 200 ₽ за час**. Факт простоя фиксируется отметкой в транспортной накладной.', cites:[['d1','3.1']]},
+  {keys:['премия','kpi','кипиай'], text:'Премия начисляется при выполнении плана **от 85%**. Ниже 85% премия не выплачивается, выше 120% — коэффициент **1,3**.\n\nУ менеджера по продажам вес показателей: маржа 50%, дебиторка 20%, соблюдение регламента скидок 30%.', cites:[['d8','3.2'],['d8','2.1']]},
+  {keys:['подарок','подарк','коррупц'], text:'Деловой подарок допустим **до 3 000 ₽**. Всё, что дороже, декларируется в комплаенс в течение **3 рабочих дней**.', cites:[['d9','1.2']]},
+  {keys:['сиз','жилет','высот','инструктаж'], text:'На складе обязательны сигнальный жилет и защитная обувь. Работа на высоте свыше **1,8 м** — только со страховочной системой и нарядом-допуском.\n\nПовторный инструктаж — раз в 6 месяцев, для склада — раз в 3 месяца.', cites:[['d7','2.2'],['d7','1.1']]},
+  {keys:['отсрочк','дебитор'], text:'Стандартная отсрочка платежа — **14 календарных дней**. Свыше 30 дней — согласование с финансовым отделом и проверка контрагента.', cites:[['d3','3.1']]},
+  {keys:['претенз','жалоб'], text:'Претензия регистрируется **в день поступления**, ответ клиенту — в течение **10 рабочих дней**. Уведомить клиента о регистрации нужно в течение 1 рабочего дня.\n\nПо повреждению груза претензия принимается в течение 5 рабочих дней с даты доставки.', cites:[['d3','4.4'],['d1','4.2']]},
+  {keys:['тариф','стоимость подачи','цена'], text:'Базовый тариф по городу — **4 500 ₽** за подачу до 3 часов, далее **900 ₽/час**.\n\nСрочная подача (менее 4 часов) — +25%, ночная с 22:00 до 06:00 — +15%.', cites:[['d12','1.1'],['d12','2.2']]}
+];
+
+/* ================= STATE ================= */
+const MODES = [
+  {id:'search', name:'Умный поиск', desc:'Ответ по документам за секунды, со ссылкой на пункт', tag:'',
+   ph:'Спросите обычными словами — например, «какой лимит на экстренный ремонт в рейсе?»',
+   chips:['Когда у нас планируется проверка?','Можно ли дать клиенту скидку больше 15%?','Когда проводится инвентаризация?','Какой клиент считается VIP и какие у него условия?'],
+   ico:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>'},
+  {id:'inspect', name:'Проверка базы', desc:'Что актуально, что устарело, чего не хватает', tag:'',
+   ph:'Опишите, к какой проверке готовитесь, или запустите полное сканирование',
+   chips:['Запустить полное сканирование базы','Что нужно к проверке Ространснадзора?','Каких документов не хватает?'],
+   ico:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>'},
+  {id:'analytics', name:'Аналитика', desc:'О чём спрашивают сотрудники и где пробелы в регламентах', tag:'',
+   ph:'Спросите про отдел, тему или период — например, «что чаще всего спрашивают в продажах?»',
+   chips:['Показать отчёт за месяц','Что чаще всего спрашивают?','Где пробелы в регламентах?'],
+   ico:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-6M22 20H2"/></svg>'},
+  {id:'onboard', name:'Помощь новичку', desc:'Введение в должность за день вместо месяца', tag:'',
+   ph:'Напишите должность — например, «диспетчер» или «менеджер по продажам»',
+   chips:['Я новый диспетчер, с чего начать?','Что должен знать менеджер по продажам в первый день?','Кладовщик — план на первую неделю'],
+   ico:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L2 8l10 5 10-5-10-5z"/><path d="M6 10.5V16c0 1.7 2.7 3 6 3s6-1.3 6-3v-5.5"/></svg>'},
+  {id:'script', name:'Скрипт для звонка', desc:'Что сказать клиенту прямо сейчас, со ссылкой на правила', tag:'',
+   ph:'Опишите ситуацию — например, «клиент просит скидку 20% и отсрочку 45 дней»',
+   chips:['Клиент требует скидку 20%','Клиент просит отсрочку 45 дней','Клиент жалуется на повреждение груза'],
+   ico:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>'},
+  {id:'docgen', name:'Генератор документов', desc:'Заявки, акты, претензии по шаблону за 10 секунд', tag:'',
+   ph:'Например: «претензия перевозчику за повреждение груза на 84 000 ₽»',
+   chips:['Претензия перевозчику за повреждение груза','Заявка на перевозку по маршруту Москва — Казань','Акт о простое транспорта на 4 часа'],
+   ico:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 15h6M9 11h3"/></svg>'}
+];
+const S = {
+  chats: [],
+  cur: null,
+  view: 'chat',
+  busy: false,
+  abort: false,
+  live: false,
+  api: {url:'https://api.polza.ai/api/v1/chat/completions', key:'', model:'gpt-4o-mini'}
+};
+const $ = s => document.querySelector(s);
+const el = (t,c,h) => {const n=document.createElement(t); if(c)n.className=c; if(h!=null)n.innerHTML=h; return n;};
+const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const uid = () => Math.random().toString(36).slice(2,9);
+const mode = id => MODES.find(m=>m.id===id) || MODES[0];
+const doc = id => DOCS.find(d=>d.id===id);
+const sleep = ms => new Promise(r=>setTimeout(r,ms));
+const RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const cur = () => S.chats.find(c=>c.id===S.cur);
+
+/* place logo mark */
+$('#sideLogo').innerHTML = LOGO;
+
+/* ================= TOASTS ================= */
+function toast(msg, icon){
+  const t = el('div','toast', (icon||'') + '<span>'+esc(msg)+'</span>');
+  $('#toasts').appendChild(t);
+  setTimeout(()=>{t.classList.add('out'); setTimeout(()=>t.remove(),320);}, 2600);
+}
+const ICO_OK = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--acc)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+
+/* ================= RIPPLE ================= */
+document.addEventListener('pointerdown', e=>{
+  const b = e.target.closest('.new-chat,.btn,.card,.chip,.doc,.mode-pill,.cite,.send,.account');
+  if(!b || RM || b.disabled) return;
+  const r = b.getBoundingClientRect();
+  const d = Math.max(r.width, r.height);
+  const s = el('span','rp');
+  s.style.width = s.style.height = d+'px';
+  s.style.left = (e.clientX - r.left - d/2)+'px';
+  s.style.top  = (e.clientY - r.top  - d/2)+'px';
+  b.appendChild(s);
+  setTimeout(()=>s.remove(), 620);
+});
+document.addEventListener('pointermove', e=>{
+  const c = e.target.closest('.card');
+  if(!c) return;
+  const r = c.getBoundingClientRect();
+  c.style.setProperty('--mx', (e.clientX-r.left)+'px');
+  c.style.setProperty('--my', (e.clientY-r.top)+'px');
+});
+
+/* ================= THEME ================= */
+function bgOf(theme){ return theme==='dark' ? '#080D20' : '#EEF2FB'; }
+$('#themeBtn').addEventListener('click', e=>{
+  const cur = document.documentElement.dataset.theme;
+  const next = cur==='dark' ? 'light' : 'dark';
+  document.documentElement.style.background = bgOf(next);
+  if(RM){ document.documentElement.dataset.theme = next; return; }
+  const r = e.currentTarget.getBoundingClientRect();
+  const x = r.left + r.width/2, y = r.top + r.height/2;
+  const R = Math.hypot(Math.max(x, innerWidth-x), Math.max(y, innerHeight-y));
+  const ov = el('div');
+  ov.style.cssText = `position:absolute;inset:0;background:${bgOf(next)};clip-path:circle(0px at ${x}px ${y}px);`;
+  $('#reveal').appendChild(ov);
+  const a = ov.animate(
+    [{clipPath:`circle(0px at ${x}px ${y}px)`},{clipPath:`circle(${R}px at ${x}px ${y}px)`}],
+    {duration:620, easing:'cubic-bezier(.3,1,.3,1)'}
+  );
+  a.onfinish = () => {
+    document.documentElement.dataset.theme = next;
+    ov.animate([{opacity:1},{opacity:0}],{duration:280,easing:'ease'}).onfinish = ()=>ov.remove();
+  };
+});
+
+/* ================= SIDEBAR ================= */
+$('#collapse').addEventListener('click', ()=> $('#app').classList.toggle('collapsed'));
+$('#burger').addEventListener('click', ()=> $('#app').classList.toggle('mopen'));
+$('#docCount').textContent = DOCS.length;
+$('#topSub').textContent = `База знаний: ${DOCS.length} документов · ${DOCS.reduce((a,d)=>a+d.pages,0)} страниц`;
+
+function newChat(){
+  const c = {id:uid(), title:'Новый чат', mode:null, msgs:[]};
+  S.chats.unshift(c);
+  S.cur = c.id;
+  S.view = 'chat';
+  renderAll();
+  $('#ta').focus();
+}
+$('#newChat').addEventListener('click', newChat);
+
+function renderChats(){
+  const box = $('#chatList');
+  box.innerHTML = '';
+  if(!S.chats.length){
+    box.appendChild(el('div','', '<div style="font-size:12px;color:var(--txt-3);padding:6px 9px">Здесь появятся ваши чаты</div>'));
+    return;
+  }
+  S.chats.forEach(c=>{
+    const b = el('button','chat-item'+(c.id===S.cur && S.view==='chat' ? ' active':''));
+    b.innerHTML = `<span class="ci-dot"></span><span class="ci-title">${esc(c.title)}</span>`;
+    const d = el('button','ci-del','<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg>');
+    d.title = 'Удалить чат';
+    d.addEventListener('click', ev=>{
+      ev.stopPropagation();
+      S.chats = S.chats.filter(x=>x.id!==c.id);
+      if(S.cur===c.id) S.cur = S.chats[0] ? S.chats[0].id : null;
+      if(!S.chats.length) newChat(); else renderAll();
+      toast('Чат удалён');
+    });
+    b.appendChild(d);
+    b.addEventListener('click', ()=>{ S.cur=c.id; S.view='chat'; $('#app').classList.remove('mopen'); renderAll(); });
+    box.appendChild(b);
+  });
+}
+
+/* ================= MODE MENU ================= */
+function renderModeMenu(){
+  const box = $('#modeItems');
+  box.innerHTML='';
+  MODES.forEach(m=>{
+    const c = cur();
+    const sel = c && c.mode===m.id;
+    const b = el('button','menu-item'+(sel?' sel':''));
+    b.innerHTML = `<span class="mi-ico">${m.ico}</span><span style="flex:1"><span class="mi-t">${m.name}</span><span class="mi-d">${m.desc}</span></span>
+      <span class="mi-check"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>`;
+    b.addEventListener('click', ()=>{ setMode(m.id); closeMenu(); });
+    box.appendChild(b);
+  });
+}
+function openMenu(){ renderModeMenu(); $('#modeMenu').classList.add('show'); $('#modeBtn').classList.add('open'); }
+function closeMenu(){ $('#modeMenu').classList.remove('show'); $('#modeBtn').classList.remove('open'); }
+$('#modeBtn').addEventListener('click', e=>{ e.stopPropagation(); $('#modeMenu').classList.contains('show') ? closeMenu() : openMenu(); });
+$('#cmpMode').addEventListener('click', e=>{ e.stopPropagation(); openMenu(); });
+document.addEventListener('click', e=>{ if(!e.target.closest('#modeMenu') && !e.target.closest('#modeBtn')) closeMenu(); });
+
+function setMode(id){
+  const c = cur(); if(!c) return;
+  const first = !c.mode;
+  c.mode = id;
+  S.view = 'chat';
+  if(!first) toast('Режим: ' + mode(id).name, ICO_OK);
+  renderAll();
+  $('#ta').focus();
+}
+
+/* ================= RENDER ================= */
+function renderAll(){
+  renderChats();
+  const c = cur();
+  const m = c && c.mode ? mode(c.mode) : MODES[0];
+
+  $('#modeIco').innerHTML = m.ico;
+  $('#modeName').textContent = m.name;
+  $('#cmpModeName').textContent = m.name;
+  $('#ta').placeholder = m.ph;
+
+  const docsView = S.view==='docs';
+  $('#composerWrap').style.display = docsView ? 'none' : '';
+  $('#modeBtn').style.display = docsView ? 'none' : '';
+  $('#navDocs').classList.toggle('active', docsView);
+
+  if(docsView){
+    $('#topTitle').textContent = 'Загруженные документы';
+    $('#topSub').textContent = `${DOCS.length} документов · ${DOCS.reduce((a,d)=>a+d.pages,0)} страниц · последняя индексация сегодня`;
+    renderDocs();
+    return;
+  }
+  $('#topTitle').textContent = c ? c.title : 'Новый чат';
+  $('#topSub').textContent = `База знаний: ${DOCS.length} документов · ${DOCS.reduce((a,d)=>a+d.pages,0)} страниц`;
+
+  if(!c || !c.mode){ renderPicker(); return; }
+  renderChat();
+}
+
+/* ---- mode picker ---- */
+function renderPicker(){
+  const v = $('#view');
+  v.innerHTML = '';
+  const hero = el('div','hero');
+  hero.innerHTML = `
+    <div class="hero-mark">${LOGO}</div>
+    <h1>С чего <span class="hl">начнём</span>?</h1>
+    <p>Агент прочитал всю документацию компании. Выберите режим — переключить его можно в любой момент, прямо в чате.</p>
+    <div class="kbline">
+      <span class="live-dot on"></span> База проиндексирована: ${DOCS.length} документов, ${DOCS.reduce((a,d)=>a+d.pages,0)} страниц
+    </div>`;
+  const wrap = el('div','wrap wide');
+  wrap.appendChild(hero);
+  const g = el('div','grid');
+  MODES.forEach((m,i)=>{
+    const c = el('button','card');
+    c.style.animationDelay = (i*55)+'ms';
+    c.innerHTML = `<div class="c-ico">${m.ico}</div><h3>${m.name}</h3><p>${m.desc}</p>`;
+    c.addEventListener('click', ()=> setMode(m.id));
+    g.appendChild(c);
+  });
+  wrap.appendChild(g);
+  v.appendChild(wrap);
+}
+
+/* ---- chat ---- */
+function renderChat(){
+  const c = cur(), m = mode(c.mode);
+  const v = $('#view');
+  v.innerHTML = '';
+  const wrap = el('div','wrap');
+  v.appendChild(wrap);
+
+  if(!c.msgs.length){
+    const s = el('div','', `
+      <div style="padding:34px 0 6px">
+        <div class="c-ico" style="width:48px;height:48px;border-radius:14px">${m.ico}</div>
+        <h1 style="font-size:25px;font-weight:800;margin:15px 0 6px">${m.name}</h1>
+        <p style="color:var(--txt-2);font-size:14.5px;max-width:560px">${m.desc}. Агент отвечает только по документам компании и показывает, откуда взят ответ.</p>
+      </div>`);
+    wrap.appendChild(s);
+    const chips = el('div','chips');
+    m.chips.forEach((t,i)=>{
+      const b = el('button','chip', esc(t));
+      b.style.animationDelay = (120 + i*60)+'ms';
+      b.addEventListener('click', ()=> send(t));
+      chips.appendChild(b);
+    });
+    wrap.appendChild(chips);
+    return;
+  }
+  c.msgs.forEach(msg => wrap.appendChild(msgNode(msg)));
+  scrollDown(true);
+}
+
+function msgNode(msg){
+  const n = el('div','msg '+(msg.role==='user'?'user':''));
+  if(msg.role==='user'){
+    n.innerHTML = `<div class="av me">Вы</div><div class="bubble-u">${esc(msg.text)}</div>`;
+    return n;
+  }
+  const av = el('div','av ai', MARK);
+  const body = el('div','body');
+  body.innerHTML = mdToHtml(msg.text||'');
+  if(msg.widget) body.appendChild(widgetNode(msg.widget));
+  if(msg.cites && msg.cites.length) body.appendChild(citesNode(msg.cites));
+  body.appendChild(toolsNode(msg));
+  n.appendChild(av); n.appendChild(body);
+  return n;
+}
+function toolsNode(msg){
+  const t = el('div','msg-tools');
+  const copy = el('button','tool','<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>');
+  copy.title='Копировать';
+  copy.addEventListener('click', ()=>{
+    const txt = (msg.text||'').replace(/\*\*/g,'');
+    navigator.clipboard?.writeText(txt).then(()=>toast('Ответ скопирован', ICO_OK)).catch(()=>toast('Не удалось скопировать'));
+  });
+  const good = el('button','tool','<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M7 22V11l5-9a2.5 2.5 0 0 1 2.5 3l-1 5H20a2 2 0 0 1 2 2.4l-1.4 7A2 2 0 0 1 18.6 22H7z"/></svg>');
+  good.title='Ответ помог';
+  good.addEventListener('click',()=>toast('Спасибо — учтём в отчёте руководителю', ICO_OK));
+  t.appendChild(copy); t.appendChild(good);
+  return t;
+}
+function citesNode(cites){
+  const box = el('div');
+  box.appendChild(el('div','cites-h','Источники в базе'));
+  const row = el('div','',''); row.style.marginTop='2px';
+  cites.forEach((cc,i)=>{
+    const d = doc(cc[0]); if(!d) return;
+    const sec = d.sections.find(s=>s.id===cc[1]);
+    const b = el('button','cite');
+    b.innerHTML = `<span class="cn">${i+1}</span><span>${esc(d.title)} · п. ${esc(cc[1])}${sec?' — '+esc(sec.title):''}</span>`;
+    b.addEventListener('click', ()=> openDoc(cc[0], cc[1]));
+    row.appendChild(b);
+  });
+  box.appendChild(row);
+  return box;
+}
+function mdToHtml(t){
+  return esc(t)
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .split(/\n{2,}/).map(p=>'<p>'+p.replace(/\n/g,'<br>')+'</p>').join('');
+}
+function scrollDown(instant){
+  const s = $('#scroll');
+  if(instant){ s.scrollTop = s.scrollHeight; return; }
+  s.scrollTo({top:s.scrollHeight, behavior:RM?'auto':'smooth'});
+}
+
+/* ================= COMPOSER ================= */
+const ta = $('#ta');
+ta.addEventListener('input', ()=>{
+  ta.style.height='auto';
+  ta.style.height = Math.min(ta.scrollHeight,170)+'px';
+  $('#send').disabled = !ta.value.trim() && !S.busy;
+});
+ta.addEventListener('keydown', e=>{
+  if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); if(!S.busy) send(ta.value); }
+});
+$('#send').addEventListener('click', ()=>{
+  if(S.busy){ S.abort = true; return; }
+  send(ta.value);
+});
+function setBusy(b){
+  S.busy = b;
+  const s = $('#send');
+  s.classList.toggle('stop', b);
+  s.disabled = b ? false : !ta.value.trim();
+  s.innerHTML = b
+    ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="5" width="14" height="14" rx="3"/></svg>'
+    : '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>';
+}
+
+/* ================= RETRIEVAL ================= */
+function norm(s){ return s.toLowerCase().replace(/ё/g,'е'); }
+function stems(s){
+  return norm(s).split(/[^a-zа-я0-9%]+/).filter(w=>w.length>2)
+    .map(w=> w.length>5 ? w.slice(0,Math.max(5, w.length-2)) : w);
+}
+function retrieve(q, k){
+  const qs = stems(q);
+  const out = [];
+  DOCS.forEach(d=> d.sections.forEach(s=>{
+    const hay = norm(d.title+' '+s.title+' '+s.text);
+    let sc = 0;
+    qs.forEach(w=>{ if(hay.includes(w)) sc += (s.title && norm(s.title).includes(w)) ? 2.4 : 1; });
+    if(sc>0) out.push({d, s, sc});
+  }));
+  out.sort((a,b)=>b.sc-a.sc);
+  return out.slice(0, k||3);
+}
+function curatedFor(q){
+  const n = norm(q);
+  let best = null, bs = 0;
+  CURATED.forEach(c=>{
+    let sc = 0;
+    c.keys.forEach(k=>{ if(n.includes(k)) sc++; });
+    if(sc>bs){ bs=sc; best=c; }
+  });
+  return best;
+}
+function mockAnswer(q){
+  const c = curatedFor(q);
+  if(c) return {text:c.text, cites:c.cites.map(x=>[x[0],x[1]])};
+  const hits = retrieve(q,3);
+  if(!hits.length){
+    return {text:'В базе нет пункта, который прямо отвечает на этот вопрос. Уточните формулировку или добавьте документ — агент отвечает только по вашим документам и ничего не додумывает.', cites:[]};
+  }
+  const top = hits[0];
+  const txt = `Нашёл в базе. **${top.d.title}, п. ${top.s.id} — ${top.s.title}:**\n\n${top.s.text}` +
+    (hits[1] ? `\n\nСмежный пункт: **${hits[1].d.title}, п. ${hits[1].s.id}** — ${hits[1].s.title}.` : '');
+  return {text:txt, cites:hits.slice(0,2).map(h=>[h.d.id,h.s.id])};
+}
+
+/* ---- live model ---- */
+async function liveAnswer(q, m){
+  const hits = retrieve(q,4);
+  const ctx = hits.map(h=>`[${h.d.id}|${h.s.id}] ${h.d.title} — п.${h.s.id} «${h.s.title}»: ${h.s.text}`).join('\n\n')
+    || DOCS.slice(0,3).map(d=>`[${d.id}|${d.sections[0].id}] ${d.title} — ${d.sections[0].text}`).join('\n\n');
+  const sys = `Ты — корпоративный ассистент «Нейродокс». Отвечай ТОЛЬКО по фрагментам документов ниже, кратко и по-деловому, на русском. Не выдумывай факты, которых нет во фрагментах. Режим работы: ${m.name} — ${m.desc}. Выделяй ключевые цифры **жирным**. В самом конце добавь строку вида SOURCES: d1|1.1, d3|2.2 — перечисли идентификаторы использованных фрагментов.\n\nФРАГМЕНТЫ:\n${ctx}`;
+  const ctrl = new AbortController();
+  const to = setTimeout(()=>ctrl.abort(), 25000);
+  try{
+    const r = await fetch(S.api.url, {
+      method:'POST', signal:ctrl.signal,
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+S.api.key},
+      body: JSON.stringify({model:S.api.model, messages:[{role:'system',content:sys},{role:'user',content:q}], temperature:0.2})
+    });
+    clearTimeout(to);
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const data = await r.json();
+    let txt = data?.choices?.[0]?.message?.content;
+    if(typeof txt !== 'string' || !txt.trim()) throw new Error('empty');
+    let cites = [];
+    txt = txt.replace(/SOURCES:\s*(.+)$/im, (_,list)=>{
+      list.split(/[,;]/).forEach(p=>{
+        const mm = p.trim().match(/(d\d+)\s*\|\s*([\d.]+)/i);
+        if(mm && doc(mm[1]) && doc(mm[1]).sections.some(s=>s.id===mm[2])) cites.push([mm[1], mm[2]]);
+      });
+      return '';
+    }).trim();
+    if(!cites.length) cites = hits.slice(0,2).map(h=>[h.d.id,h.s.id]);
+    return {text:txt, cites};
+  }catch(err){
+    clearTimeout(to);
+    toast('ИИ недоступен — отвечаю по встроенной базе');
+    return mockAnswer(q);
+  }
+}
+
+/* ================= SEND ================= */
+async function send(text){
+  text = (text||'').trim();
+  if(!text || S.busy) return;
+  let c = cur();
+  if(!c){ newChat(); c = cur(); }
+  if(!c.mode) c.mode = 'search';
+  const m = mode(c.mode);
+
+  ta.value=''; ta.style.height='auto';
+  if(c.title==='Новый чат'){ c.title = text.length>34 ? text.slice(0,34)+'…' : text; $('#topTitle').textContent=c.title; renderChats(); }
+
+  const um = {role:'user', text};
+  c.msgs.push(um);
+  renderChat();
+  const wrap = $('#view').querySelector('.wrap');
+  scrollDown();
+
+  setBusy(true);
+  S.abort = false;
+
+  const tn = el('div','msg');
+  tn.innerHTML = '<div class="av ai">'+MARK+'</div>';
+  const tb = el('div','body');
+  const box = el('div','think');
+  const steps = [
+    'Разбираю вопрос',
+    `Ищу по базе — ${DOCS.length} документов`,
+    'Сверяю формулировки в найденных пунктах',
+    'Собираю ответ со ссылкой на источник'
+  ];
+  const rows = steps.map(s=>{
+    const r = el('div','th-row', `<span class="th-ic"><span class="spin"></span></span><span>${s}</span>`);
+    box.appendChild(r); return r;
+  });
+  const bar = el('div','th-bar','<i></i>');
+  box.appendChild(bar);
+  tb.appendChild(box); tn.appendChild(tb); wrap.appendChild(tn);
+  scrollDown();
+
+  const answerP = S.live && S.api.key ? liveAnswer(text, m) : (async()=>{ await sleep(650); return mockAnswer(text); })();
+
+  const done = '<span class="th-ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--acc)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>';
+  for(let i=0;i<rows.length;i++){
+    if(S.abort) break;
+    rows[i].classList.add('on');
+    bar.querySelector('i').style.width = ((i+1)/rows.length*100)+'%';
+    await sleep(RM?60:[420,560,480,420][i]);
+    rows[i].classList.remove('on'); rows[i].classList.add('done');
+    rows[i].innerHTML = done + '<span>' + steps[i] + '</span>';
+  }
+
+  let ans;
+  try{ ans = await answerP; }catch(e){ ans = mockAnswer(text); }
+
+  const w = widgetFor(m.id, text);
+  if(w && w.answer){ ans = {text:w.answer, cites:w.cites||ans.cites}; }
+
+  tn.remove();
+  if(S.abort){ setBusy(false); toast('Остановлено'); return; }
+
+  const am = {role:'assistant', text:ans.text, cites:ans.cites, widget:w?w.widget:null};
+  c.msgs.push(am);
+
+  const node = el('div','msg');
+  node.innerHTML = '<div class="av ai">'+MARK+'</div>';
+  const body = el('div','body');
+  node.appendChild(body);
+  wrap.appendChild(node);
+
+  await typeOut(body, ans.text);
+
+  if(am.widget) body.appendChild(widgetNode(am.widget));
+  if(am.cites && am.cites.length) body.appendChild(citesNode(am.cites));
+  body.appendChild(toolsNode(am));
+  scrollDown();
+  setBusy(false);
+  ta.focus();
+}
+
+async function typeOut(node, text){
+  if(RM){ node.innerHTML = mdToHtml(text); return; }
+  const words = text.split(/(\s+)/);
+  let acc='';
+  for(let i=0;i<words.length;i++){
+    if(S.abort) break;
+    acc += words[i];
+    node.innerHTML = mdToHtml(acc);
+    const last = node.querySelector('p:last-child');
+    if(last) last.insertAdjacentHTML('beforeend','<span class="cursor"></span>');
+    if(i%3===0) scrollDown(true);
+    await sleep(14);
+  }
+  node.innerHTML = mdToHtml(text);
+}
+
+/* ================= MODE WIDGETS ================= */
+function widgetFor(modeId, q){
+  const n = norm(q);
+  if(modeId==='inspect'){
+    return {answer:'Просканировал базу. Ниже — состояние документов и что нужно поправить до ближайшей проверки.', widget:{type:'inspect'}, cites:[['d11','1.2']]};
+  }
+  if(modeId==='analytics'){
+    return {answer:'Отчёт за последние 30 дней. Главное: **40% вопросов — про сроки доставки**, значит регламент по срокам написан непонятно и его стоит переписать.', widget:{type:'analytics'}, cites:[['d1','1.4']]};
+  }
+  if(modeId==='onboard'){
+    const role = n.includes('продаж') || n.includes('менеджер') ? 'Менеджер по продажам'
+              : n.includes('кладов') || n.includes('склад') ? 'Кладовщик' : 'Диспетчер';
+    return {answer:`План ввода в должность — **${role}**. Собран из ваших регламентов, всё со ссылкой на пункт.`, widget:{type:'onboard', role}, cites:[['d10','2.3'],['d7','1.1']]};
+  }
+  if(modeId==='script'){
+    return {answer:'Готовый сценарий разговора под эту ситуацию. Каждая фраза опирается на пункт регламента — менеджеру не нужно говорить «уточню и перезвоню».', widget:{type:'script', q}, cites:[['d3','2.2'],['d3','3.1']]};
+  }
+  if(modeId==='docgen'){
+    const kind = n.includes('претенз') ? 'Претензия' : n.includes('акт') ? 'Акт' : 'Заявка';
+    return {answer:`Документ готов — собран по вашему шаблону, данные подставлены из базы. Осталось проверить и подписать.`, widget:{type:'docgen', kind, q}, cites:[['d1','4.2']]};
+  }
+  return null;
+}
+
+function widgetNode(w){
+  if(w.type==='inspect') return inspectW();
+  if(w.type==='analytics') return analyticsW();
+  if(w.type==='onboard') return onboardW(w.role);
+  if(w.type==='script') return scriptW(w.q);
+  if(w.type==='docgen') return docgenW(w.kind, w.q);
+  return el('div');
+}
+
+function stIco(s){
+  if(s==='ok') return '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ok)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+  if(s==='warn') return '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--warn)" stroke-width="2.2" stroke-linecap="round"><path d="M12 8v5M12 17h.01"/><circle cx="12" cy="12" r="9"/></svg>';
+  return '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--bad)" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/></svg>';
+}
+const ST_TXT = {ok:'актуален', warn:'скоро истечёт', old:'устарел'};
+
+function inspectW(){
+  const w = el('div','w');
+  const ok = DOCS.filter(d=>d.status==='ok').length;
+  const warn = DOCS.filter(d=>d.status==='warn').length;
+  const old = DOCS.filter(d=>d.status==='old').length;
+  w.innerHTML = `<div class="w-top">
+      <span class="mp-ico">${mode('inspect').ico}</span>
+      <h4>Проверка базы знаний</h4>
+      <span class="pill">только что</span>
+    </div>`;
+  const b = el('div','w-body');
+  b.innerHTML = `<div class="kpis">
+      <div class="kpi"><div class="v" style="color:var(--ok)">${ok}</div><div class="l">актуальны</div></div>
+      <div class="kpi"><div class="v" style="color:var(--warn)">${warn}</div><div class="l">пора обновить</div></div>
+      <div class="kpi"><div class="v" style="color:var(--bad)">${old+1}</div><div class="l">риск на проверке</div></div>
+    </div>`;
+  DOCS.forEach((d,i)=>{
+    const r = el('div','scan');
+    r.style.animationDelay = (i*60)+'ms';
+    r.innerHTML = `${stIco(d.status)}<span class="nm">${esc(d.title)}</span><span class="st ${d.status}">${ST_TXT[d.status]}</span>`;
+    r.style.cursor='pointer';
+    r.addEventListener('click', ()=> openDoc(d.id));
+    b.appendChild(r);
+  });
+  const miss = el('div','scan');
+  miss.style.animationDelay = (DOCS.length*60)+'ms';
+  miss.innerHTML = `${stIco('old')}<span class="nm" style="color:var(--txt-3)">Регламент претензионной работы</span><span class="st old">отсутствует</span>`;
+  b.appendChild(miss);
+  b.appendChild(el('div','note', `<b>Что делать до 12 марта.</b> Обновить «Антикоррупционную политику» (не менялась с 27.09.2025) и «Закупки», продлить «Транспорт и ТО». Отдельного регламента претензионной работы в базе нет — сейчас порядок разбросан по двум документам, инспектор запросит один.`));
+  w.appendChild(b);
+  const acts = el('div','w-acts');
+  const b1 = el('button','btn pri','Сформировать чек-лист к проверке');
+  b1.addEventListener('click', ()=> toast('Чек-лист собран — 14 пунктов', ICO_OK));
+  const b2 = el('button','btn gh','Назначить ответственных');
+  b2.addEventListener('click', ()=> toast('Задачи отправлены руководителям отделов', ICO_OK));
+  acts.appendChild(b1); acts.appendChild(b2);
+  w.appendChild(acts);
+  return w;
+}
+
+function analyticsW(){
+  const data = [
+    ['Сроки и статусы доставки', 40],
+    ['Скидки и коммерческие условия', 22],
+    ['Оформление документов и претензии', 16],
+    ['Охрана труда и допуски', 12],
+    ['Прочее', 10]
+  ];
+  const w = el('div','w');
+  w.innerHTML = `<div class="w-top">
+      <span class="mp-ico">${mode('analytics').ico}</span>
+      <h4>Отчёт руководителю · 30 дней</h4>
+      <span class="pill">1 248 запросов</span>
+    </div>`;
+  const b = el('div','w-body');
+  b.innerHTML = `<div class="kpis">
+      <div class="kpi"><div class="v">1 248</div><div class="l">вопросов к агенту</div></div>
+      <div class="kpi"><div class="v">4,1 с</div><div class="l">среднее время ответа</div></div>
+      <div class="kpi"><div class="v" style="color:var(--acc)">312 ч</div><div class="l">сэкономлено за месяц</div></div>
+    </div>`;
+  const bars = el('div','bars');
+  data.forEach(([l,v])=>{
+    const r = el('div');
+    r.innerHTML = `<div class="bar-l">${esc(l)}</div>
+      <div class="bar-row"><div class="bar-t"><i data-v="${v}"></i></div><div class="bar-v">${v}%</div></div>`;
+    bars.appendChild(r);
+  });
+  b.appendChild(bars);
+  b.appendChild(el('div','note','<b>Вывод.</b> Больше всего вопросов у диспетчерской — про сроки доставки. Пункт 1.4 регламента грузоперевозок читают, но переспрашивают: формулировка неоднозначная. Перепишете пункт — снимете около 500 вопросов в месяц.'));
+  w.appendChild(b);
+  const acts = el('div','w-acts');
+  const b1 = el('button','btn pri','Открыть спорный пункт 1.4');
+  b1.addEventListener('click', ()=> openDoc('d1','1.4'));
+  const b2 = el('button','btn gh','Выгрузить отчёт');
+  b2.addEventListener('click', ()=> toast('Отчёт выгружен в PDF', ICO_OK));
+  acts.appendChild(b1); acts.appendChild(b2);
+  w.appendChild(acts);
+  setTimeout(()=> w.querySelectorAll('.bar-t i').forEach((i,k)=> setTimeout(()=> i.style.width = i.dataset.v+'%', k*90)), 60);
+  return w;
+}
+
+function onboardW(role){
+  const plan = {
+    'Диспетчер':[
+      ['День 1 · Доступы и охрана труда','Вводный инструктаж до допуска к работе, получение доступов через заявку в ИТ.',['d10','2.3']],
+      ['День 1 · Приём заявки','Заявка подтверждается за 2 рабочих часа, после 18:00 — до 11:00 следующего дня.',['d1','1.1']],
+      ['День 2 · Сроки и простой','Город — 24 ч, межгород — 72 ч. Простой: первые 2 часа бесплатно, далее 1 200 ₽/час.',['d1','3.1']],
+      ['День 2 · Деньги в рейсе','Экстренный ремонт до 30 000 ₽ — без согласования, выше — только с руководителем.',['d1','2.3']],
+      ['День 3 · KPI','Заявки в срок ≥ 95%, рейсы без срыва ≥ 97%, ответ клиенту ≤ 15 минут.',['d8','1.1']]
+    ],
+    'Менеджер по продажам':[
+      ['День 1 · Доступы и инструктаж','Вводный инструктаж, доступы, закрепление наставника приказом.',['d10','2.3']],
+      ['День 1 · Скидки','До 15% — руководитель отдела, 15–25% — коммерческий директор, свыше 25% — генеральный.',['d3','2.2']],
+      ['День 2 · VIP-клиенты','От 1,5 млн ₽ в квартал или 20 отгрузок в месяц: скидка 12%, отсрочка 30 дней.',['d3','2.5']],
+      ['День 2 · Тарифы','База по городу 4 500 ₽, срочная подача +25%, ночная +15%.',['d12','2.2']],
+      ['День 3 · KPI и претензии','Маржа 50%, дебиторка 20%, регламент скидок 30%. Ответ по претензии — 10 рабочих дней.',['d8','2.1']]
+    ],
+    'Кладовщик':[
+      ['День 1 · Охрана труда','Жилет и защитная обувь обязательны, высота свыше 1,8 м — только с нарядом-допуском.',['d7','2.2']],
+      ['День 1 · Приёмка','Приёмка за 4 часа с прибытия, расхождение — акт ТОРГ-2 в тот же день.',['d2','2.1']],
+      ['День 2 · Брак и списание','Брак свыше 3% партии — акт и согласование, порог списания 15 000 ₽.',['d2','4.1']],
+      ['День 2 · Инвентаризация','Ежеквартально, последняя пятница квартала. Годовая — 15–20 декабря.',['d2','1.2']],
+      ['День 3 · Опасные грузы','Отдельная секция, совместное хранение с пищевой продукцией запрещено.',['d2','3.3']]
+    ]
+  }[role];
+  const w = el('div','w');
+  w.innerHTML = `<div class="w-top"><span class="mp-ico">${mode('onboard').ico}</span><h4>${esc(role)} · первые 3 дня</h4><span class="pill">вместо месяца</span></div>`;
+  const b = el('div','w-body');
+  plan.forEach(([t,d,c],i)=>{
+    const r = el('div','scan');
+    r.style.animationDelay=(i*70)+'ms';
+    r.style.alignItems='flex-start';
+    r.innerHTML = `<span style="margin-top:3px">${stIco('ok')}</span>
+      <span class="nm" style="white-space:normal;color:var(--txt)">
+        <b style="font-size:13px">${esc(t)}</b>
+        <span style="display:block;color:var(--txt-3);font-size:12.4px;margin-top:2px">${esc(d)}</span>
+      </span>`;
+    const link = el('button','cite'); link.style.margin='0';
+    link.innerHTML = '<span class="cn">п.</span><span>'+esc(c[1])+'</span>';
+    link.addEventListener('click',()=>openDoc(c[0],c[1]));
+    r.appendChild(link);
+    b.appendChild(r);
+  });
+  b.appendChild(el('div','note','<b>Что это даёт.</b> Новичок не отвлекает коллег и выходит на рабочий темп за 3 дня. Все вопросы он задаёт агенту — и они попадают в отчёт руководителю.'));
+  w.appendChild(b);
+  return w;
+}
+
+function scriptW(q){
+  const n = norm(q);
+  let title, lines, tail;
+  if(n.includes('отсроч')){
+    title='Клиент просит отсрочку 45 дней';
+    lines=[
+      ['Признать запрос','«Понимаю, отсрочка для вас важна — давайте посмотрим, что мы можем дать по регламенту».'],
+      ['Дать факт','«Стандартная отсрочка — 14 календарных дней. Всё, что больше 30, проходит проверку в финансовом отделе».'],
+      ['Предложить выход','«Могу сегодня же запустить проверку и дать вам 30 дней — это без согласований. Если нужно 45, отправлю запрос финансистам, ответ будет в течение дня».'],
+      ['Закрыть','«Давайте зафиксируем 30 дней в договоре сейчас, а на 45 подадим запрос параллельно — так вы не теряете время».']
+    ];
+    tail='Не обещайте 45 дней до проверки контрагента — это нарушение п. 3.1.';
+  } else if(n.includes('поврежд') || n.includes('жалоб') || n.includes('претенз')){
+    title='Клиент жалуется на повреждение груза';
+    lines=[
+      ['Снять напряжение','«Вижу проблему, беру на себя. Сейчас зафиксируем и запустим разбор».'],
+      ['Дать процедуру','«По регламенту повреждение фиксируется актом и фото при приёмке, претензия принимается в течение 5 рабочих дней с даты доставки — мы в сроке».'],
+      ['Обозначить сроки','«Претензию регистрирую сегодня, официальный ответ — в течение 10 рабочих дней. О регистрации сообщу вам завтра».'],
+      ['Удержать клиента','«Пока идёт разбор, ближайшую отгрузку подадим приоритетно, чтобы вы не встали».']
+    ];
+    tail='Не признавайте вину до акта — но и не спорьте: назовите процедуру и сроки.';
+  } else {
+    title='Клиент требует скидку 20%';
+    lines=[
+      ['Не отказывать в лоб','«Скидка обсуждаема — давайте посмотрим на объём, от него всё зависит».'],
+      ['Дать рамку','«До 15% я согласую сам, сегодня. От 15% до 25% нужно письменное решение коммерческого директора».'],
+      ['Предложить обмен','«Могу дать 15% прямо сейчас. Если выходите на 20 отгрузок в месяц или 1,5 млн ₽ в квартал — попадаете в VIP: 12% базово, отсрочка 30 дней и приоритетная подача за 4 часа».'],
+      ['Закрыть','«Фиксируем 15% и стартуем сегодня, а запрос на 20% я отправлю коммерческому — ответ будет к завтрашнему утру».']
+    ];
+    tail='Не называйте цифру выше 15% без письменного согласования — это нарушение п. 2.2.';
+  }
+  const w = el('div','w');
+  w.innerHTML = `<div class="w-top"><span class="mp-ico">${mode('script').ico}</span><h4>${esc(title)}</h4><span class="pill">на звонке</span></div>`;
+  const b = el('div','w-body');
+  lines.forEach(([t,s],i)=>{
+    const r = el('div','scan');
+    r.style.animationDelay=(i*70)+'ms';
+    r.style.alignItems='flex-start';
+    r.innerHTML = `<span class="cn" style="width:20px;height:20px;border-radius:6px;background:var(--brand);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:700;margin-top:2px">${i+1}</span>
+      <span class="nm" style="white-space:normal">
+        <b style="font-size:12.5px;color:var(--txt-3);text-transform:uppercase;letter-spacing:.05em">${esc(t)}</b>
+        <span style="display:block;color:var(--txt);font-size:13.6px;margin-top:3px">${esc(s)}</span>
+      </span>`;
+    b.appendChild(r);
+  });
+  b.appendChild(el('div','note','<b>Осторожно.</b> '+esc(tail)));
+  w.appendChild(b);
+  const acts = el('div','w-acts');
+  const b1 = el('button','btn gh','Скопировать скрипт');
+  b1.addEventListener('click', ()=>{
+    navigator.clipboard?.writeText(lines.map(l=>l[0]+': '+l[1]).join('\n')).then(()=>toast('Скрипт скопирован', ICO_OK)).catch(()=>toast('Не удалось скопировать'));
+  });
+  acts.appendChild(b1);
+  w.appendChild(acts);
+  return w;
+}
+
+function docgenW(kind, q){
+  const today = new Date().toLocaleDateString('ru-RU');
+  const bodies = {
+    'Претензия':`ПРЕТЕНЗИЯ № ПР-2026/041
+от ${today}
+
+Кому: ООО «Перевозчик»
+От: ООО «Компания»
+
+По транспортной накладной № ТН-118293 от 07.07.2026 (маршрут Москва — Казань)
+при приёмке груза выявлено повреждение упаковки и товара.
+
+Факт повреждения зафиксирован актом и фотоматериалами в присутствии
+представителя склада — в соответствии с п. 4.2 Регламента грузоперевозок.
+
+Сумма ущерба: 84 000 ₽.
+
+Требуем возместить ущерб в течение 10 рабочих дней с даты получения
+настоящей претензии.
+
+Приложения:
+1. Копия транспортной накладной — 1 л.
+2. Акт о повреждении груза — 1 л.
+3. Фотоматериалы — 4 л.
+
+Генеральный директор ___________________ /_____________/`,
+    'Заявка':`ЗАЯВКА НА ПЕРЕВОЗКУ № З-2026/337
+от ${today}
+
+Маршрут: Москва — Казань
+Дата подачи транспорта: ${today}, до 14:00
+Груз: паллетированный, 12 паллет, 8,4 т
+Тариф: базовый + надбавка за срочную подачу 25% (п. 2.2 Тарифов)
+
+Заявка подтверждается в течение 2 рабочих часов (п. 1.1 Регламента грузоперевозок).
+Срок доставки: до 72 часов с момента подтверждения (п. 1.4).
+
+Диспетчер ___________________ /_____________/`,
+    'Акт':`АКТ О ПРОСТОЕ ТРАНСПОРТНОГО СРЕДСТВА № А-2026/019
+от ${today}
+
+Транспортное средство: Volvo FH, гос. номер А123ВС777
+Место: склад грузоотправителя, Москва
+Время подачи: 09:00. Начало погрузки: 13:00.
+
+Общее время простоя: 4 часа.
+Первые 2 часа не тарифицируются (п. 3.1 Регламента грузоперевозок).
+К оплате: 2 часа × 1 200 ₽ = 2 400 ₽.
+
+Факт простоя зафиксирован отметкой в транспортной накладной.
+
+Представитель перевозчика ______________ /_____________/
+Представитель склада __________________ /_____________/`
+  };
+  const w = el('div','w');
+  w.innerHTML = `<div class="w-top"><span class="mp-ico">${mode('docgen').ico}</span><h4>${esc(kind)} · черновик</h4><span class="pill">10 секунд</span></div>`;
+  const b = el('div','w-body');
+  const pre = el('div','docgen', esc(bodies[kind] || bodies['Заявка']));
+  b.appendChild(pre);
+  b.appendChild(el('div','note','<b>Данные подставлены из базы.</b> Суммы, сроки и ссылки на пункты взяты из ваших регламентов — не из головы модели.'));
+  w.appendChild(b);
+  const acts = el('div','w-acts');
+  const b1 = el('button','btn pri','Скачать .docx');
+  b1.addEventListener('click', ()=> toast('Документ выгружен', ICO_OK));
+  const b2 = el('button','btn gh','Скопировать текст');
+  b2.addEventListener('click', ()=>{
+    navigator.clipboard?.writeText(bodies[kind]||'').then(()=>toast('Текст скопирован', ICO_OK)).catch(()=>toast('Не удалось скопировать'));
+  });
+  const b3 = el('button','btn gh','Отправить на согласование');
+  b3.addEventListener('click', ()=> toast('Отправлено руководителю', ICO_OK));
+  acts.appendChild(b1); acts.appendChild(b2); acts.appendChild(b3);
+  w.appendChild(acts);
+  return w;
+}
+
+/* ================= DOCS VIEW ================= */
+$('#navDocs').addEventListener('click', ()=>{ S.view='docs'; $('#app').classList.remove('mopen'); renderAll(); $('#scroll').scrollTop=0; });
+
+function renderDocs(){
+  const v = $('#view');
+  v.innerHTML='';
+  const wrap = el('div','wrap wide');
+  wrap.innerHTML = `
+    <div style="display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-bottom:4px">
+      <div style="flex:1;min-width:240px">
+        <h1 style="font-size:25px;font-weight:800">База знаний компании</h1>
+        <p style="color:var(--txt-2);font-size:13.8px;margin-top:5px">Всё, что агент прочитал и держит в памяти. Каждый ответ он даёт со ссылкой на конкретный пункт из этих документов.</p>
+      </div>
+    </div>
+    <div class="stat-row">
+      <div class="stat"><div class="v">${DOCS.length}</div><div class="l">документов</div></div>
+      <div class="stat"><div class="v">${DOCS.reduce((a,d)=>a+d.pages,0)}</div><div class="l">страниц</div></div>
+      <div class="stat"><div class="v">${DOCS.reduce((a,d)=>a+d.sections.length,0)}</div><div class="l">пунктов проиндексировано</div></div>
+      <div class="stat"><div class="v" style="color:var(--ok)">100%</div><div class="l">готовность базы</div></div>
+    </div>`;
+  const g = el('div','dgrid');
+  DOCS.forEach((d,i)=>{
+    const c = el('button','doc');
+    c.style.animationDelay=(i*35)+'ms';
+    c.innerHTML = `
+      <div class="doc-top">
+        <span class="doc-ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></span>
+        <span class="doc-code">${d.code} · v${d.ver}</span>
+        <span style="margin-left:auto" class="st ${d.status}">${stIco(d.status)}</span>
+      </div>
+      <h4>${esc(d.title)}</h4>
+      <div class="doc-meta">
+        <span class="pill">${esc(d.dept)}</span>
+        <span class="pill">${d.pages} стр.</span>
+        <span class="pill">${d.sections.length} пунктов</span>
+      </div>
+      <div class="doc-bar"><i></i></div>
+      <div style="font-size:11px;color:var(--txt-3);margin-top:8px">Обновлён ${d.updated} · проиндексирован</div>`;
+    c.addEventListener('click', ()=> openDoc(d.id));
+    g.appendChild(c);
+  });
+  wrap.appendChild(el('div','side-label','Документы'));
+  wrap.appendChild(g);
+
+  const dz = el('div','dz');
+  dz.style.marginTop='16px';
+  dz.innerHTML = '<b>Перетащите файлы сюда</b>, чтобы добавить в базу — PDF, Word, Excel, сканы.<br>Агент разберёт их на пункты и начнёт отвечать по ним.';
+  ['dragenter','dragover'].forEach(ev=> dz.addEventListener(ev, e=>{e.preventDefault(); dz.classList.add('over');}));
+  ['dragleave','drop'].forEach(ev=> dz.addEventListener(ev, e=>{e.preventDefault(); dz.classList.remove('over');}));
+  dz.addEventListener('drop', e=>{
+    const f = e.dataTransfer.files[0];
+    indexFile(dz, f ? f.name : 'Новый документ.pdf');
+  });
+  dz.addEventListener('click', ()=> indexFile(dz, 'Регламент претензионной работы.pdf'));
+  wrap.appendChild(dz);
+  v.appendChild(wrap);
+}
+
+async function indexFile(dz, name){
+  if(dz.dataset.busy) return;
+  dz.dataset.busy = '1';
+  const steps = ['Загружаю файл','Распознаю структуру','Разбираю на пункты','Строю индекс'];
+  for(let i=0;i<steps.length;i++){
+    dz.innerHTML = `<div style="display:flex;align-items:center;gap:10px;justify-content:center;color:var(--txt)">
+      <span class="spin"></span><b>${esc(name)}</b><span style="color:var(--txt-3)">— ${steps[i]}…</span></div>
+      <div class="th-bar" style="max-width:320px;margin:12px auto 0"><i style="width:${(i+1)/steps.length*100}%"></i></div>`;
+    await sleep(RM?80:700);
+  }
+  dz.innerHTML = `<div style="display:flex;align-items:center;gap:9px;justify-content:center;color:var(--ok);font-weight:600">${ICO_OK}<span>${esc(name)} — в базе. Агент уже отвечает по нему.</span></div>`;
+  toast('Документ добавлен в базу', ICO_OK);
+  await sleep(2600);
+  delete dz.dataset.busy;
+  if(S.view==='docs') renderDocs();
+}
+
+/* ================= DOC PANEL ================= */
+function openDoc(id, secId){
+  const d = doc(id); if(!d) return;
+  $('#pTitle').textContent = d.title;
+  $('#pMeta').innerHTML = `<span class="pill">${d.code} · v${d.ver}</span><span class="pill">${esc(d.dept)}</span><span class="pill">${d.pages} стр.</span><span class="st ${d.status}">${ST_TXT[d.status]}</span>`;
+  const b = $('#pBody');
+  b.innerHTML = `<div style="font-size:12px;color:var(--txt-3);padding:12px 2px 2px">Обновлён ${d.updated}. Ниже — проиндексированные пункты: агент цитирует именно их.</div>`;
+  d.sections.forEach(s=>{
+    const n = el('div','sec');
+    n.id = 'sec-'+d.id+'-'+s.id;
+    n.innerHTML = `<h5><span class="num">п. ${esc(s.id)}</span> ${esc(s.title)}</h5><p>${esc(s.text)}</p>`;
+    b.appendChild(n);
+  });
+  $('#panel').classList.add('show');
+  $('#panel').setAttribute('aria-hidden','false');
+  $('#ov').classList.add('show');
+  if(secId){
+    setTimeout(()=>{
+      const t = document.getElementById('sec-'+d.id+'-'+secId);
+      if(t){ t.classList.add('hit'); t.scrollIntoView({block:'center', behavior:RM?'auto':'smooth'}); }
+    }, 260);
+  }
+}
+function closeDoc(){
+  $('#panel').classList.remove('show');
+  $('#panel').setAttribute('aria-hidden','true');
+  if(!anyModalOpen()) $('#ov').classList.remove('show');
+}
+$('#pClose').addEventListener('click', closeDoc);
+
+/* ================= ACCOUNT MODAL ================= */
+function openAcc(){ $('#accModal').classList.add('show'); $('#ov').classList.add('show'); }
+function closeAcc(){ $('#accModal').classList.remove('show'); if(!anyModalOpen()) $('#ov').classList.remove('show'); }
+$('#accountBtn').addEventListener('click', openAcc);
+$('#accClose').addEventListener('click', closeAcc);
+$('#accOk').addEventListener('click', closeAcc);
+$('#accManage').addEventListener('click', ()=> toast('Раздел управления доступами — 142 сотрудника, 7 отделов', ICO_OK));
+
+/* ================= SETTINGS ================= */
+function openSet(){
+  $('#fUrl').value = S.api.url; $('#fKey').value = S.api.key; $('#fModel').value = S.api.model;
+  $('#swLive').classList.toggle('on', S.live);
+  toggleLiveFields(S.live);
+  $('#setModal').classList.add('show'); $('#ov').classList.add('show');
+}
+function closeSet(){ $('#setModal').classList.remove('show'); if(!anyModalOpen()) $('#ov').classList.remove('show'); }
+function toggleLiveFields(on){
+  $('#liveFields').style.display = on ? '' : 'none';
+  $('#demoNote').style.display = on ? 'none' : '';
+}
+function anyModalOpen(){
+  return $('#panel').classList.contains('show') || $('#setModal').classList.contains('show') || $('#accModal').classList.contains('show');
+}
+$('#settingsBtn').addEventListener('click', openSet);
+$('#setClose').addEventListener('click', closeSet);
+$('#setCancel').addEventListener('click', closeSet);
+$('#swLive').addEventListener('click', ()=>{
+  const on = !$('#swLive').classList.contains('on');
+  $('#swLive').classList.toggle('on', on);
+  toggleLiveFields(on);
+});
+$('#setSave').addEventListener('click', ()=>{
+  const on = $('#swLive').classList.contains('on');
+  S.api.url = $('#fUrl').value.trim() || S.api.url;
+  S.api.key = $('#fKey').value.trim();
+  S.api.model = $('#fModel').value.trim() || S.api.model;
+  S.live = on && !!S.api.key;
+  if(on && !S.api.key) toast('Добавьте ключ API — пока отвечаю по встроенной базе');
+  $('#liveDot').classList.toggle('on', S.live);
+  $('#liveTxt').textContent = S.live ? 'ИИ подключён · '+S.api.model : 'Демо-режим · встроенная база';
+  closeSet();
+  toast(S.live ? 'ИИ подключён' : 'Настройки сохранены', ICO_OK);
+});
+/* single overlay handler closes whatever is open */
+$('#ov').addEventListener('click', ()=>{ closeDoc(); closeSet(); closeAcc(); });
+document.addEventListener('keydown', e=>{
+  if(e.key==='Escape'){ closeDoc(); closeSet(); closeAcc(); closeMenu(); }
+  if((e.metaKey||e.ctrlKey) && e.key==='k'){ e.preventDefault(); newChat(); }
+});
+
+/* ================= BOOT ================= */
+try{ newChat(); }
+catch(err){
+  console.error('boot error', err);
+  $('#view').innerHTML = '<div class="wrap"><div class="hero"><div class="hero-mark">'+LOGO+'</div><h1>Нейродокс</h1><p>Платформа готова. Обновите страницу, если экран не загрузился.</p></div></div>';
+}
+</script>
+</body>
+</html>
